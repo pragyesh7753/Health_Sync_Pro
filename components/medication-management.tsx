@@ -252,12 +252,12 @@ export function MedicationManagement() {
                     )}
                   </div>
 
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
-                      <Edit className="h-4 w-4" />
+                  <div className="flex gap-2 flex-shrink-0">
+                    <Button variant="outline" size="sm" className="p-2">
+                      <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
-                    <Button variant="outline" size="sm">
-                      <Trash2 className="h-4 w-4" />
+                    <Button variant="outline" size="sm" className="p-2">
+                      <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
                   </div>
                 </div>

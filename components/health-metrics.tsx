@@ -164,7 +164,7 @@ export function HealthMetrics() {
       </div>
 
       {/* Current Status Cards */}
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 lg:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="bg-gradient-to-br from-red-500 to-red-600 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Blood Pressure</CardTitle>
@@ -229,24 +229,24 @@ export function HealthMetrics() {
       {/* BMI Calculator */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
             <Calculator className="h-5 w-5" />
             BMI Calculator
           </CardTitle>
           <CardDescription>Calculate your Body Mass Index</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
             <div className="space-y-2">
-              <Label htmlFor="height">Height (cm)</Label>
-              <Input id="height" placeholder="175" value={bmiHeight} onChange={(e) => setBmiHeight(e.target.value)} />
+              <Label htmlFor="height" className="text-sm font-medium">Height (cm)</Label>
+              <Input id="height" placeholder="175" value={bmiHeight} onChange={(e) => setBmiHeight(e.target.value)} className="text-base" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="weight">Weight (kg)</Label>
-              <Input id="weight" placeholder="70" value={bmiWeight} onChange={(e) => setBmiWeight(e.target.value)} />
+              <Label htmlFor="weight" className="text-sm font-medium">Weight (kg)</Label>
+              <Input id="weight" placeholder="70" value={bmiWeight} onChange={(e) => setBmiWeight(e.target.value)} className="text-base" />
             </div>
             <div className="flex items-end">
-              <Button onClick={calculateBMI} className="w-full bg-blue-600 hover:bg-blue-700">
+              <Button onClick={calculateBMI} className="w-full bg-blue-600 hover:bg-blue-700 h-10">
                 Calculate BMI
               </Button>
             </div>
@@ -271,11 +271,11 @@ export function HealthMetrics() {
 
       {/* Detailed Charts */}
       <Tabs defaultValue="vitals" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="vitals">Vital Signs</TabsTrigger>
-          <TabsTrigger value="weight">Weight & BMI</TabsTrigger>
-          <TabsTrigger value="sleep">Sleep</TabsTrigger>
-          <TabsTrigger value="exercise">Exercise</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
+          <TabsTrigger value="vitals" className="text-xs sm:text-sm px-2 py-2">Vital Signs</TabsTrigger>
+          <TabsTrigger value="weight" className="text-xs sm:text-sm px-2 py-2">Weight & BMI</TabsTrigger>
+          <TabsTrigger value="sleep" className="text-xs sm:text-sm px-2 py-2">Sleep</TabsTrigger>
+          <TabsTrigger value="exercise" className="text-xs sm:text-sm px-2 py-2">Exercise</TabsTrigger>
         </TabsList>
 
         <TabsContent value="vitals" className="space-y-4">

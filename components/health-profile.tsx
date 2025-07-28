@@ -82,21 +82,21 @@ export function HealthProfile() {
 
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
+              <Label htmlFor="firstName" className="text-sm font-medium">First Name</Label>
               <Input
                 id="firstName"
                 defaultValue="John"
                 disabled={!isEditing}
-                className={!isEditing ? "bg-gray-50" : ""}
+                className={`${!isEditing ? "bg-gray-50" : ""} text-base`}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
+              <Label htmlFor="lastName" className="text-sm font-medium">Last Name</Label>
               <Input
                 id="lastName"
                 defaultValue="Doe"
                 disabled={!isEditing}
-                className={!isEditing ? "bg-gray-50" : ""}
+                className={`${!isEditing ? "bg-gray-50" : ""} text-base`}
               />
             </div>
             <div className="space-y-2">
@@ -213,7 +213,7 @@ export function HealthProfile() {
       </Card>
 
       {/* Medical Information */}
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 xl:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -335,7 +335,7 @@ export function HealthProfile() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label>Relation</Label>
                 <Select disabled={!isEditing}>

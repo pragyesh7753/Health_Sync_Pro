@@ -215,22 +215,22 @@ export function AppointmentManagement() {
                       </Badge>
                     </div>
 
-                    <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-3">
+                    <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 mb-3">
                       <div className="flex items-center gap-2">
-                        <CalendarIcon className="h-4 w-4 text-gray-500" />
-                        <span className="text-sm">{appointment.date}</span>
+                        <CalendarIcon className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
+                        <span className="text-xs sm:text-sm truncate">{appointment.date}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-gray-500" />
-                        <span className="text-sm">{appointment.time}</span>
+                        <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
+                        <span className="text-xs sm:text-sm">{appointment.time}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-gray-500" />
-                        <span className="text-sm">{appointment.location}</span>
+                        <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
+                        <span className="text-xs sm:text-sm truncate">{appointment.location}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-gray-500" />
-                        <span className="text-sm">{appointment.phone}</span>
+                        <Phone className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
+                        <span className="text-xs sm:text-sm">{appointment.phone}</span>
                       </div>
                     </div>
 
@@ -271,27 +271,27 @@ export function AppointmentManagement() {
           <CardDescription>Your healthcare providers and their contact information</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
             {doctors.map((doctor, index) => (
-              <div key={index} className="border rounded-lg p-4">
+              <div key={index} className="border rounded-lg p-3 sm:p-4">
                 <div className="space-y-3">
                   <div>
-                    <h3 className="font-semibold text-lg">{doctor.name}</h3>
-                    <p className="text-sm text-gray-600">{doctor.specialty}</p>
+                    <h3 className="font-semibold text-base sm:text-lg">{doctor.name}</h3>
+                    <p className="text-xs sm:text-sm text-gray-600">{doctor.specialty}</p>
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm">{doctor.phone}</span>
+                      <Phone className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
+                      <span className="text-xs sm:text-sm truncate">{doctor.phone}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm">{doctor.location}</span>
+                      <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
+                      <span className="text-xs sm:text-sm truncate">{doctor.location}</span>
                     </div>
                   </div>
 
-                  <Button variant="outline" size="sm" className="w-full bg-transparent">
+                  <Button variant="outline" size="sm" className="w-full bg-transparent text-xs sm:text-sm">
                     Book Appointment
                   </Button>
                 </div>

@@ -202,11 +202,11 @@ export function HealthRecords() {
       </Card>
 
       <Tabs defaultValue="documents" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="documents">Documents</TabsTrigger>
-          <TabsTrigger value="lab-results">Lab Results</TabsTrigger>
-          <TabsTrigger value="vaccinations">Vaccinations</TabsTrigger>
-          <TabsTrigger value="insurance">Insurance</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
+          <TabsTrigger value="documents" className="text-xs sm:text-sm px-2 py-2">Documents</TabsTrigger>
+          <TabsTrigger value="lab-results" className="text-xs sm:text-sm px-2 py-2">Lab Results</TabsTrigger>
+          <TabsTrigger value="vaccinations" className="text-xs sm:text-sm px-2 py-2">Vaccinations</TabsTrigger>
+          <TabsTrigger value="insurance" className="text-xs sm:text-sm px-2 py-2">Insurance</TabsTrigger>
         </TabsList>
 
         <TabsContent value="documents" className="space-y-4">
@@ -309,24 +309,25 @@ export function HealthRecords() {
                       <Badge variant="outline">{lab.date}</Badge>
                     </div>
                     <div className="overflow-x-auto">
-                      <table className="w-full text-xs sm:text-sm">
-                        <thead>
-                          <tr className="border-b">
-                            <th className="text-left py-2">Parameter</th>
-                            <th className="text-left py-2">Value</th>
-                            <th className="text-left py-2">Unit</th>
-                            <th className="text-left py-2">Reference Range</th>
-                            <th className="text-left py-2">Status</th>
-                          </tr>
-                        </thead>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-xs sm:text-sm min-w-[500px]">
+                          <thead>
+                            <tr className="border-b">
+                              <th className="text-left py-2 px-1">Parameter</th>
+                              <th className="text-left py-2 px-1">Value</th>
+                              <th className="text-left py-2 px-1">Unit</th>
+                              <th className="text-left py-2 px-1">Reference Range</th>
+                              <th className="text-left py-2 px-1">Status</th>
+                            </tr>
+                          </thead>
                         <tbody>
                           {lab.results.map((result, resultIndex) => (
                             <tr key={resultIndex} className="border-b">
-                              <td className="py-2">{result.parameter}</td>
-                              <td className="py-2 font-medium">{result.value}</td>
-                              <td className="py-2">{result.unit}</td>
-                              <td className="py-2">{result.range}</td>
-                              <td className="py-2">
+                              <td className="py-2 px-1">{result.parameter}</td>
+                              <td className="py-2 px-1 font-medium">{result.value}</td>
+                              <td className="py-2 px-1">{result.unit}</td>
+                              <td className="py-2 px-1">{result.range}</td>
+                              <td className="py-2 px-1">
                                 <Badge
                                   className={
                                     result.status === "normal"
@@ -341,8 +342,9 @@ export function HealthRecords() {
                               </td>
                             </tr>
                           ))}
-                        </tbody>
-                      </table>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -402,55 +404,57 @@ export function HealthRecords() {
               <CardDescription>Your health insurance details and coverage</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2">
+              <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-sm font-medium text-gray-600">Insurance Provider</Label>
-                    <p className="text-lg font-semibold">{insuranceInfo.provider}</p>
+                    <Label className="text-xs sm:text-sm font-medium text-gray-600">Insurance Provider</Label>
+                    <p className="text-base sm:text-lg font-semibold break-words">{insuranceInfo.provider}</p>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-600">Policy Number</Label>
-                    <p className="font-medium">{insuranceInfo.policyNumber}</p>
+                    <Label className="text-xs sm:text-sm font-medium text-gray-600">Policy Number</Label>
+                    <p className="font-medium text-sm sm:text-base break-all">{insuranceInfo.policyNumber}</p>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-600">Group Number</Label>
-                    <p className="font-medium">{insuranceInfo.groupNumber}</p>
+                    <Label className="text-xs sm:text-sm font-medium text-gray-600">Group Number</Label>
+                    <p className="font-medium text-sm sm:text-base">{insuranceInfo.groupNumber}</p>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-600">Member ID</Label>
-                    <p className="font-medium">{insuranceInfo.memberID}</p>
+                    <Label className="text-xs sm:text-sm font-medium text-gray-600">Member ID</Label>
+                    <p className="font-medium text-sm sm:text-base break-all">{insuranceInfo.memberID}</p>
                   </div>
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-sm font-medium text-gray-600">Coverage Period</Label>
-                    <p className="font-medium">
+                    <Label className="text-xs sm:text-sm font-medium text-gray-600">Coverage Period</Label>
+                    <p className="font-medium text-sm sm:text-base">
                       {insuranceInfo.effectiveDate} - {insuranceInfo.expirationDate}
                     </p>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-600">Copay</Label>
-                    <p className="font-medium">{insuranceInfo.copay}</p>
+                    <Label className="text-xs sm:text-sm font-medium text-gray-600">Copay</Label>
+                    <p className="font-medium text-sm sm:text-base">{insuranceInfo.copay}</p>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-600">Annual Deductible</Label>
-                    <p className="font-medium">{insuranceInfo.deductible}</p>
+                    <Label className="text-xs sm:text-sm font-medium text-gray-600">Annual Deductible</Label>
+                    <p className="font-medium text-sm sm:text-base">{insuranceInfo.deductible}</p>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-600">Out-of-Pocket Maximum</Label>
-                    <p className="font-medium">{insuranceInfo.outOfPocketMax}</p>
+                    <Label className="text-xs sm:text-sm font-medium text-gray-600">Out-of-Pocket Maximum</Label>
+                    <p className="font-medium text-sm sm:text-base">{insuranceInfo.outOfPocketMax}</p>
                   </div>
                 </div>
               </div>
               <div className="mt-6 pt-6 border-t">
-                <Button variant="outline" className="mr-4 bg-transparent">
-                  <Download className="mr-2 h-4 w-4" />
-                  Download Insurance Card
-                </Button>
-                <Button variant="outline">
-                  <Edit className="mr-2 h-4 w-4" />
-                  Update Information
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button variant="outline" className="bg-transparent text-xs sm:text-sm">
+                    <Download className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                    Download Insurance Card
+                  </Button>
+                  <Button variant="outline" className="text-xs sm:text-sm">
+                    <Edit className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                    Update Information
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>

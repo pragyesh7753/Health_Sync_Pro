@@ -64,21 +64,21 @@ export function LoginRegister() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
+    <div className="mobile-viewport flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-3 sm:p-4 no-horizontal-scroll">
       <div className="w-full max-w-md">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600">
-              <Stethoscope className="h-6 w-6 text-white" />
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4">
+            <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-blue-600">
+              <Stethoscope className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">HealthSync</h1>
-              <p className="text-sm text-gray-600">Personal Health Manager</p>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">HealthSync Pro</h1>
+              <p className="text-xs sm:text-sm text-gray-600">Personal Health Manager</p>
             </div>
           </div>
-          <h2 className="text-xl font-semibold text-gray-800">{isLogin ? "Welcome back" : "Create your account"}</h2>
-          <p className="text-gray-600 mt-1">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800">{isLogin ? "Welcome back" : "Create your account"}</h2>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">
             {isLogin ? "Sign in to access your health dashboard" : "Join us to start managing your health"}
           </p>
         </div>
@@ -99,7 +99,7 @@ export function LoginRegister() {
               {!isLogin && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="firstName">First Name</Label>
+                    <Label htmlFor="firstName" className="text-sm font-medium">First Name</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
@@ -109,13 +109,13 @@ export function LoginRegister() {
                         placeholder="John"
                         value={formData.firstName}
                         onChange={handleInputChange}
-                        className="pl-10"
+                        className="pl-10 text-base"
                         required
                       />
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="lastName">Last Name</Label>
+                    <Label htmlFor="lastName" className="text-sm font-medium">Last Name</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
@@ -125,7 +125,7 @@ export function LoginRegister() {
                         placeholder="Doe"
                         value={formData.lastName}
                         onChange={handleInputChange}
-                        className="pl-10"
+                        className="pl-10 text-base"
                         required
                       />
                     </div>
@@ -135,7 +135,7 @@ export function LoginRegister() {
 
               {/* Email */}
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-sm font-medium">Email</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
@@ -145,7 +145,7 @@ export function LoginRegister() {
                     placeholder="john@example.com"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="pl-10"
+                    className="pl-10 text-base"
                     required
                   />
                 </div>
