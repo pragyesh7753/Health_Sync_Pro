@@ -9,7 +9,6 @@ import { MedicationManagement } from "@/components/medication-management"
 import { HealthMetrics } from "@/components/health-metrics"
 import { AppointmentManagement } from "@/components/appointment-management"
 import { HealthRecords } from "@/components/health-records"
-import { FloatingActionButton } from "@/components/floating-action-button"
 import { NotificationSystem, useNotifications } from "@/components/notification-system"
 import { MobileBottomNav } from "@/components/mobile-bottom-nav"
 import { useIsMobile } from "@/hooks/use-mobile"
@@ -63,7 +62,6 @@ export function HealthApp() {
           </main>
         </SidebarInset>
         
-        <FloatingActionButton />
         <NotificationSystem 
           notifications={notifications} 
           onRemove={removeNotification} 

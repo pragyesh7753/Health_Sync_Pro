@@ -3,7 +3,6 @@ import { AuthProvider, useAuth } from "@/components/auth-context"
 import { LoginRegister } from "@/components/login-register"
 import { HealthApp } from "@/components/health-app"
 import { EnhancedLoading } from "@/components/enhanced-loading"
-import { useEffect, useState } from "react"
 
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuth()
