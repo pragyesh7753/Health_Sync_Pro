@@ -341,4 +341,9 @@
   .energy-gradient {
     background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
   }
+  
+  /* Safe area padding for mobile devices */
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }

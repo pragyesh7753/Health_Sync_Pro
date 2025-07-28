@@ -11,10 +11,13 @@ import { AppointmentManagement } from "@/components/appointment-management"
 import { HealthRecords } from "@/components/health-records"
 import { FloatingActionButton } from "@/components/floating-action-button"
 import { NotificationSystem, useNotifications } from "@/components/notification-system"
+import { MobileBottomNav } from "@/components/mobile-bottom-nav"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export function HealthApp() {
   const [activeTab, setActiveTab] = useState("dashboard")
   const { notifications, removeNotification, showSuccess } = useNotifications()
+  const isMobile = useIsMobile()
   
   // Show welcome notification on mount
   useEffect(() => {
@@ -53,9 +56,9 @@ export function HealthApp() {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-cyan-400/5 to-blue-400/5 rounded-full animate-pulse-slow"></div>
         </div>
         
-        <AppSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-        <SidebarInset>
-          <main className="flex-1 p-2 sm:p-4 lg:p-6 overflow-x-hidden w-full min-w-0 relative z-10">
+        {!isMobile && <AppSidebar activeTab={activeTab} setActiveTab={setActiveTab} />}
+        <SidebarInset className={isMobile ? "w-full" : ""}>
+          <main className={`flex-1 p-2 sm:p-4 lg:p-6 overflow-x-hidden w-full min-w-0 relative z-10 ${isMobile ? "pb-20" : ""}`}>
             <div className="w-full animate-fade-in">{renderContent()}</div>
           </main>
         </SidebarInset>
@@ -65,6 +68,7 @@ export function HealthApp() {
           notifications={notifications} 
           onRemove={removeNotification} 
         />
+        <MobileBottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
     </SidebarProvider>
   )
