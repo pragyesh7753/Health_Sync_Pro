@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { SidebarProvider } from "@/components/ui/sidebar"
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { Dashboard } from "@/components/dashboard"
 import { HealthProfile } from "@/components/health-profile"
@@ -54,9 +54,11 @@ export function HealthApp() {
         </div>
         
         <AppSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-        <main className="flex-1 p-2 sm:p-4 lg:p-6 overflow-x-hidden w-full min-w-0 relative z-10">
-          <div className="w-full animate-fade-in">{renderContent()}</div>
-        </main>
+        <SidebarInset>
+          <main className="flex-1 p-2 sm:p-4 lg:p-6 overflow-x-hidden w-full min-w-0 relative z-10">
+            <div className="w-full animate-fade-in">{renderContent()}</div>
+          </main>
+        </SidebarInset>
         
         <FloatingActionButton />
         <NotificationSystem 
