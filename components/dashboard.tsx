@@ -1,9 +1,12 @@
+
 "use client"
 
+import React from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { EnhancedProgress } from "@/components/enhanced-progress"
+import { QuickEntryModal } from "@/components/quick-entry-modal"
 import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Bell } from "lucide-react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts"
 
@@ -29,8 +32,10 @@ const upcomingAppointments = [
 ]
 
 export function Dashboard() {
+  const [quickEntryOpen, setQuickEntryOpen] = React.useState(false);
   return (
     <div className="space-y-6 animate-slide-up">
+      <QuickEntryModal open={quickEntryOpen} onOpenChange={setQuickEntryOpen} />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="animate-fade-in">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -38,7 +43,10 @@ export function Dashboard() {
           </h1>
           <p className="text-gray-600 text-sm sm:text-base mt-1">Welcome back! Here's your health overview for today.</p>
         </div>
-        <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+        <Button
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+          onClick={() => setQuickEntryOpen(true)}
+        >
           <Plus className="mr-2 h-4 w-4" />
           Quick Entry
         </Button>
@@ -284,4 +292,5 @@ export function Dashboard() {
       </div>
     </div>
   )
+
 }
