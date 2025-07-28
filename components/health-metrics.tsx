@@ -96,7 +96,7 @@ export function HealthMetrics() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Health Metrics</h1>
           <p className="text-gray-600">Track and monitor your vital health indicators</p>
@@ -164,7 +164,7 @@ export function HealthMetrics() {
       </div>
 
       {/* Current Status Cards */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="bg-gradient-to-br from-red-500 to-red-600 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Blood Pressure</CardTitle>
@@ -236,7 +236,7 @@ export function HealthMetrics() {
           <CardDescription>Calculate your Body Mass Index</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <div className="space-y-2">
               <Label htmlFor="height">Height (cm)</Label>
               <Input id="height" placeholder="175" value={bmiHeight} onChange={(e) => setBmiHeight(e.target.value)} />
@@ -285,7 +285,7 @@ export function HealthMetrics() {
               <CardDescription>Your blood pressure readings over time</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
                 <LineChart data={bloodPressureData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
@@ -306,7 +306,7 @@ export function HealthMetrics() {
               <CardDescription>Track your weight loss/gain journey</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
                 <AreaChart data={weightData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
@@ -333,7 +333,7 @@ export function HealthMetrics() {
               <CardDescription>Your sleep duration and quality over the past week</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
                 <BarChart data={sleepData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
@@ -353,7 +353,7 @@ export function HealthMetrics() {
               <CardDescription>Your daily steps and exercise metrics</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
                 <BarChart data={exerciseData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
@@ -378,7 +378,7 @@ export function HealthMetrics() {
           <CardDescription>Track glucose levels throughout the day</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <div className="p-4 bg-green-50 rounded-lg border border-green-200">
               <div className="flex items-center justify-between">
                 <div>

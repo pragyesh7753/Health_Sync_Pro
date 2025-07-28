@@ -41,15 +41,17 @@ export function HealthProfile() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Health Profile</h1>
-          <p className="text-gray-600">Manage your personal health information and medical history</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Health Profile</h1>
+          <p className="text-gray-600 text-sm sm:text-base">
+            Manage your personal health information and medical history
+          </p>
         </div>
         <Button
           onClick={() => setIsEditing(!isEditing)}
           variant={isEditing ? "outline" : "default"}
-          className={isEditing ? "" : "bg-blue-600 hover:bg-blue-700"}
+          className={`w-full sm:w-auto ${isEditing ? "" : "bg-blue-600 hover:bg-blue-700"}`}
         >
           <Edit className="mr-2 h-4 w-4" />
           {isEditing ? "Cancel" : "Edit Profile"}
@@ -66,19 +68,19 @@ export function HealthProfile() {
           <CardDescription>Basic demographic and contact information</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex items-center gap-6">
-            <Avatar className="h-20 w-20">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
+            <Avatar className="h-16 w-16 sm:h-20 sm:w-20">
               <AvatarImage src="/placeholder.svg?height=80&width=80" />
               <AvatarFallback className="text-lg">JD</AvatarFallback>
             </Avatar>
             {isEditing && (
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="w-full sm:w-auto bg-transparent">
                 Change Photo
               </Button>
             )}
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="firstName">First Name</Label>
               <Input
@@ -182,7 +184,7 @@ export function HealthProfile() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               <div className="space-y-2">
                 <Label>Name</Label>
                 <Input defaultValue="Jane Doe" disabled={!isEditing} className={!isEditing ? "bg-gray-50" : ""} />
@@ -211,7 +213,7 @@ export function HealthProfile() {
       </Card>
 
       {/* Medical Information */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -293,7 +295,7 @@ export function HealthProfile() {
           <CardDescription>Medical insurance details</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             <div className="space-y-2">
               <Label>Insurance Provider</Label>
               <Input

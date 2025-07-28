@@ -109,7 +109,7 @@ export function AppointmentManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Appointment Management</h1>
           <p className="text-gray-600">Schedule and manage your medical appointments</p>
@@ -198,10 +198,10 @@ export function AppointmentManagement() {
         <CardContent>
           <div className="space-y-4">
             {upcomingAppointments.map((appointment) => (
-              <div key={appointment.id} className="border rounded-lg p-4">
-                <div className="flex items-start justify-between">
+              <div key={appointment.id} className="border rounded-lg p-3 sm:p-4">
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
                       <h3 className="text-lg font-semibold">{appointment.doctor}</h3>
                       <Badge variant="outline">{appointment.specialty}</Badge>
                       <Badge
@@ -215,7 +215,7 @@ export function AppointmentManagement() {
                       </Badge>
                     </div>
 
-                    <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-4 mb-3">
+                    <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-3">
                       <div className="flex items-center gap-2">
                         <CalendarIcon className="h-4 w-4 text-gray-500" />
                         <span className="text-sm">{appointment.date}</span>
@@ -271,7 +271,7 @@ export function AppointmentManagement() {
           <CardDescription>Your healthcare providers and their contact information</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {doctors.map((doctor, index) => (
               <div key={index} className="border rounded-lg p-4">
                 <div className="space-y-3">
@@ -314,7 +314,7 @@ export function AppointmentManagement() {
           <div className="space-y-4">
             {appointmentHistory.map((appointment) => (
               <div key={appointment.id} className="border rounded-lg p-4">
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 gap-2 sm:gap-0">
                   <div>
                     <h3 className="font-semibold">{appointment.doctor}</h3>
                     <p className="text-sm text-gray-600">{appointment.specialty}</p>

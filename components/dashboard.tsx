@@ -31,12 +31,12 @@ const upcomingAppointments = [
 export function Dashboard() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Health Dashboard</h1>
-          <p className="text-gray-600">Welcome back! Here's your health overview for today.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Health Dashboard</h1>
+          <p className="text-gray-600 text-sm sm:text-base">Welcome back! Here's your health overview for today.</p>
         </div>
-        <Button className="bg-blue-600 hover:bg-blue-700">
+        <Button className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Quick Entry
         </Button>
@@ -69,7 +69,7 @@ export function Dashboard() {
       </Card>
 
       {/* Key Metrics */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Daily Steps</CardTitle>
@@ -120,7 +120,7 @@ export function Dashboard() {
       </div>
 
       {/* Charts */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Weekly Activity</CardTitle>
@@ -160,7 +160,7 @@ export function Dashboard() {
       </div>
 
       {/* Upcoming Items */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -177,12 +177,17 @@ export function Dashboard() {
           <CardContent>
             <div className="space-y-4">
               {upcomingMedications.map((med, index) => (
-                <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-gray-50">
-                  <div>
+                <div
+                  key={index}
+                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 rounded-lg bg-gray-50 gap-2 sm:gap-0"
+                >
+                  <div className="flex-1">
                     <p className="font-medium text-gray-900">{med.name}</p>
                     <p className="text-sm text-gray-600">{med.dosage}</p>
                   </div>
-                  <Badge variant="outline">{med.time}</Badge>
+                  <Badge variant="outline" className="self-start sm:self-center">
+                    {med.time}
+                  </Badge>
                 </div>
               ))}
             </div>

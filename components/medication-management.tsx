@@ -76,10 +76,12 @@ export function MedicationManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Medication Management</h1>
-          <p className="text-gray-600">Track your medications, set reminders, and monitor side effects</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Medication Management</h1>
+          <p className="text-gray-600 text-sm sm:text-base">
+            Track your medications, set reminders, and monitor side effects
+          </p>
         </div>
         <Dialog open={isAddingMedication} onOpenChange={setIsAddingMedication}>
           <DialogTrigger asChild>
@@ -148,15 +150,18 @@ export function MedicationManagement() {
         <CardContent>
           <div className="space-y-4">
             {todaySchedule.map((item, index) => (
-              <div key={index} className="flex items-center justify-between p-4 rounded-lg border">
-                <div className="flex items-center gap-4">
+              <div
+                key={index}
+                className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 rounded-lg border gap-3 sm:gap-4"
+              >
+                <div className="flex items-center gap-4 flex-1">
                   <div className={`w-3 h-3 rounded-full ${item.taken ? "bg-green-500" : "bg-gray-300"}`} />
                   <div>
                     <p className="font-medium">{item.medication}</p>
                     <p className="text-sm text-gray-600">{item.time}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                   {item.taken ? (
                     <Badge variant="secondary" className="bg-green-100 text-green-800">
                       <CheckCircle className="mr-1 h-3 w-3" />
@@ -186,16 +191,20 @@ export function MedicationManagement() {
         <CardContent>
           <div className="space-y-4">
             {medications.map((med) => (
-              <div key={med.id} className="border rounded-lg p-4">
-                <div className="flex items-start justify-between">
+              <div key={med.id} className="border rounded-lg p-3 sm:p-4">
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold">{med.name}</h3>
-                      <Badge variant="outline">{med.dosage}</Badge>
-                      <Badge variant="secondary">{med.frequency}</Badge>
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                      <h3 className="text-base sm:text-lg font-semibold">{med.name}</h3>
+                      <Badge variant="outline" className="text-xs">
+                        {med.dosage}
+                      </Badge>
+                      <Badge variant="secondary" className="text-xs">
+                        {med.frequency}
+                      </Badge>
                     </div>
 
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4">
+                    <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-4">
                       <div>
                         <p className="text-sm text-gray-600">Schedule</p>
                         <p className="font-medium">{med.time}</p>

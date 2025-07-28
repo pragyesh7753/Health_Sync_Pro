@@ -134,7 +134,7 @@ export function HealthRecords() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Health Records</h1>
           <p className="text-gray-600">Securely store and manage your medical documents</p>
@@ -213,7 +213,7 @@ export function HealthRecords() {
           {/* Search and Filter */}
           <Card>
             <CardContent className="pt-6">
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
@@ -254,15 +254,15 @@ export function HealthRecords() {
                 {filteredDocuments.map((doc) => (
                   <div
                     key={doc.id}
-                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 border rounded-lg hover:bg-gray-50 gap-3 sm:gap-4"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <FileText className="h-5 w-5 text-blue-600" />
+                    <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
                       </div>
-                      <div>
-                        <h3 className="font-medium">{doc.name}</h3>
-                        <div className="flex items-center gap-4 text-sm text-gray-600">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-medium truncate">{doc.name}</h3>
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
                           <span>{doc.type}</span>
                           <span>•</span>
                           <span>{doc.date}</span>
@@ -309,7 +309,7 @@ export function HealthRecords() {
                       <Badge variant="outline">{lab.date}</Badge>
                     </div>
                     <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
+                      <table className="w-full text-xs sm:text-sm">
                         <thead>
                           <tr className="border-b">
                             <th className="text-left py-2">Parameter</th>
@@ -363,7 +363,10 @@ export function HealthRecords() {
             <CardContent>
               <div className="space-y-4">
                 {vaccinations.map((vaccine, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 border rounded-lg gap-3 sm:gap-0"
+                  >
                     <div>
                       <h3 className="font-medium">{vaccine.vaccine}</h3>
                       <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
@@ -399,7 +402,7 @@ export function HealthRecords() {
               <CardDescription>Your health insurance details and coverage</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2">
                 <div className="space-y-4">
                   <div>
                     <Label className="text-sm font-medium text-gray-600">Insurance Provider</Label>
