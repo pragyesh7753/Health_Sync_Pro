@@ -37,7 +37,7 @@ export function HealthApp() {
       <div className="flex mobile-viewport w-full bg-gradient-to-br from-blue-50 to-indigo-100 no-horizontal-scroll">
         <AppSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         <main className="flex-1 p-2 sm:p-4 lg:p-6 overflow-x-hidden w-full min-w-0">
-          <div className="mx-auto max-w-7xl w-full">{renderContent()}</div>
+          <div className="w-full">{renderContent()}</div>
         </main>
       </div>
     </SidebarProvider>
