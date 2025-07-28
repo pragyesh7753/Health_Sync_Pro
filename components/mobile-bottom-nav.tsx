@@ -1,5 +1,4 @@
 "use client"
-
 import { Activity, Calendar, FileText, Home, Pill, User } from "lucide-react"
 import { useIsMobile } from "@/hooks/use-mobile"
 
@@ -23,22 +22,28 @@ export function MobileBottomNav({ activeTab, setActiveTab }: MobileBottomNavProp
   if (!isMobile) return null
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1 safe-area-pb">
-      <div className="flex justify-around items-center max-w-md mx-auto">
-        {navItems.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => setActiveTab(item.id)}
-            className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 min-w-0 flex-1 ${
-              activeTab === item.id
-                ? "text-blue-600 bg-blue-50"
-                : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-            }`}
-          >
-            <item.icon className={`h-5 w-5 mb-1 ${activeTab === item.id ? "text-blue-600" : ""}`} />
-            <span className="text-xs font-medium truncate">{item.title}</span>
-          </button>
-        ))}
+    <div className="fixed bottom-4 left-4 right-4 z-50 flex justify-center safe-area-pb">
+      <div className="bg-white/95 backdrop-blur-md border border-gray-200 rounded-full px-3 py-2 shadow-lg">
+        <div className="flex items-center space-x-1">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`relative flex items-center justify-center p-3 rounded-full transition-all duration-300 ${
+                activeTab === item.id
+                  ? "text-white bg-blue-600 shadow-md scale-110"
+                  : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+              }`}
+            >
+              <item.icon className="h-5 w-5" />
+              
+              {/* Active indicator dot */}
+              {activeTab === item.id && (
+                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full" />
+              )}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )
