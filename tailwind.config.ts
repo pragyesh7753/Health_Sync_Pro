@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
 // all in fixtures is set to tailwind v3 as interims solutions
 
@@ -18,6 +19,9 @@ const config: Config = {
       'lg': '1024px',
       'xl': '1280px',
       '2xl': '1536px',
+    },
+    fontFamily: {
+      sans: ['Inter', 'system-ui', 'sans-serif'],
     },
   	extend: {
   		colors: {
@@ -93,11 +97,63 @@ const config: Config = {
   				to: {
   					height: '0'
   				}
+  			},
+  			'float': {
+  				'0%, 100%': {
+  					transform: 'translateY(0px)'
+  				},
+  				'50%': {
+  					transform: 'translateY(-10px)'
+  				}
+  			},
+  			'bounce-subtle': {
+  				'0%, 100%': {
+  					transform: 'translateY(0)',
+  					'animation-timing-function': 'cubic-bezier(0.8, 0, 1, 1)'
+  				},
+  				'50%': {
+  					transform: 'translateY(-5px)',
+  					'animation-timing-function': 'cubic-bezier(0, 0, 0.2, 1)'
+  				}
+  			},
+  			'slide-up': {
+  				from: {
+  					opacity: '0',
+  					transform: 'translateY(20px)'
+  				},
+  				to: {
+  					opacity: '1',
+  					transform: 'translateY(0)'
+  				}
+  			},
+  			'fade-in': {
+  				from: {
+  					opacity: '0'
+  				},
+  				to: {
+  					opacity: '1'
+  				}
+  			},
+  			'scale-in': {
+  				from: {
+  					opacity: '0',
+  					transform: 'scale(0.9)'
+  				},
+  				to: {
+  					opacity: '1',
+  					transform: 'scale(1)'
+  				}
   			}
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+  			'float': 'float 6s ease-in-out infinite',
+  			'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+  			'bounce-subtle': 'bounce-subtle 2s infinite',
+  			'slide-up': 'slide-up 0.6s ease-out',
+  			'fade-in': 'fade-in 0.8s ease-out',
+  			'scale-in': 'scale-in 0.5s ease-out'
   		},
       spacing: {
         '18': '4.5rem',
@@ -106,6 +162,13 @@ const config: Config = {
       minHeight: {
         'screen-small': '100vh',
         'screen-dynamic': '100dvh',
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
+      boxShadow: {
+        'glow': '0 0 20px rgba(59, 130, 246, 0.3)',
+        'glow-lg': '0 0 30px rgba(59, 130, 246, 0.4)',
       }
   	}
   },
