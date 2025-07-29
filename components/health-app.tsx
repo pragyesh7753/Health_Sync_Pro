@@ -26,6 +26,11 @@ export function HealthApp() {
     return () => clearTimeout(timer)
   }, [])
 
+  // Scroll to top when activeTab changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [activeTab])
+
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
