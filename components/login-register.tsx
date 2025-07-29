@@ -123,7 +123,7 @@ export function LoginRegister() {
                         id="firstName"
                         name="firstName"
                         type="text"
-                        placeholder="John"
+                        placeholder="Enter First Name"
                         value={formData.firstName}
                         onChange={handleInputChange}
                         className="pl-10 text-base glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
@@ -139,7 +139,7 @@ export function LoginRegister() {
                         id="lastName"
                         name="lastName"
                         type="text"
-                        placeholder="Doe"
+                        placeholder="Enter Last Name"
                         value={formData.lastName}
                         onChange={handleInputChange}
                         className="pl-10 text-base glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
@@ -159,7 +159,7 @@ export function LoginRegister() {
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="john@example.com"
+                    placeholder="Enter Your Email"
                     value={formData.email}
                     onChange={handleInputChange}
                     className="pl-10 text-base glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
@@ -177,7 +177,7 @@ export function LoginRegister() {
                     id="password"
                     name="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
+                    placeholder="Enter Password"
                     value={formData.password}
                     onChange={handleInputChange}
                     className="pl-10 pr-10 glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
@@ -203,7 +203,7 @@ export function LoginRegister() {
                       id="confirmPassword"
                       name="confirmPassword"
                       type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
+                      placeholder="Confirm Your Password"
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
                       className="pl-10 glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
