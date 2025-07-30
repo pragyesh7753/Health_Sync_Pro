@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Stethoscope, Eye, EyeOff, Mail, Lock, User, AlertCircle } from "lucide-react"
+import { Stethoscope, Eye, EyeOff, Mail, Lock, User,Phone, AlertCircle } from "lucide-react"
 import { useAuth } from "@/components/auth-context"
 
 export function LoginRegister() {
@@ -22,6 +22,7 @@ export function LoginRegister() {
     firstName: "",
     lastName: "",
     confirmPassword: "",
+    mobileNumber: "",
   })
 
   const { login, register } = useAuth()
@@ -151,16 +152,33 @@ export function LoginRegister() {
               )}
 
               {/* Email */}
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+                  <div className="relative group">
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors duration-200" />
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="Enter Your Email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="pl-10 text-base glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
+                      required
+                    />
+                  </div>
+                </div>
+              {/* Mobile Number */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+                <Label htmlFor="mobileNumber" className="text-sm font-medium">Mobile Number</Label>
                 <div className="relative group">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors duration-200" />
+                  <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors duration-200" />
                   <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="Enter Your Email"
-                    value={formData.email}
+                    id="mobileNumber"
+                    name="mobileNumber"
+                    type="tel"
+                    placeholder="Enter Your Mobile Number"
+                    value={formData.mobileNumber}
                     onChange={handleInputChange}
                     className="pl-10 text-base glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
                     required
@@ -255,6 +273,7 @@ export function LoginRegister() {
                       firstName: "",
                       lastName: "",
                       confirmPassword: "",
+                      mobileNumber: "",
                     })
                   }}
                   className="ml-1 text-blue-600 hover:text-purple-600 font-semibold transition-all duration-200 hover:scale-105"

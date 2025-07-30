@@ -23,22 +23,18 @@ export function HealthProfile() {
       setNewAllergy("")
     }
   }
-
   const removeAllergy = (index: number) => {
     setAllergies(allergies.filter((_, i) => i !== index))
   }
-
   const addCondition = () => {
     if (newCondition.trim()) {
       setConditions([...conditions, newCondition.trim()])
       setNewCondition("")
     }
   }
-
   const removeCondition = (index: number) => {
     setConditions(conditions.filter((_, i) => i !== index))
   }
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -57,7 +53,6 @@ export function HealthProfile() {
           {isEditing ? "Cancel" : "Edit Profile"}
         </Button>
       </div>
-
       {/* Personal Information */}
       <Card>
         <CardHeader>
@@ -85,7 +80,8 @@ export function HealthProfile() {
               <Label htmlFor="firstName" className="text-sm font-medium">First Name</Label>
               <Input
                 id="firstName"
-                defaultValue="John"
+                defaultValue="Virat"
+
                 disabled={!isEditing}
                 className={`${!isEditing ? "bg-gray-50" : ""} text-base`}
               />
@@ -94,7 +90,7 @@ export function HealthProfile() {
               <Label htmlFor="lastName" className="text-sm font-medium">Last Name</Label>
               <Input
                 id="lastName"
-                defaultValue="Doe"
+                defaultValue="Kohali"
                 disabled={!isEditing}
                 className={`${!isEditing ? "bg-gray-50" : ""} text-base`}
               />
@@ -187,7 +183,7 @@ export function HealthProfile() {
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               <div className="space-y-2">
                 <Label>Name</Label>
-                <Input defaultValue="Jane Doe" disabled={!isEditing} className={!isEditing ? "bg-gray-50" : ""} />
+                <Input defaultValue="Anushka" disabled={!isEditing} className={!isEditing ? "bg-gray-50" : ""} />
               </div>
               <div className="space-y-2">
                 <Label>Relationship</Label>
@@ -196,7 +192,7 @@ export function HealthProfile() {
               <div className="space-y-2">
                 <Label>Phone</Label>
                 <Input
-                  defaultValue="+1 (555) 987-6543"
+                  defaultValue="+91 (987) 654-3210"
                   disabled={!isEditing}
                   className={!isEditing ? "bg-gray-50" : ""}
                 />
