@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useAuth } from "@/components/auth-context"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { User, Phone, Heart, AlertTriangle, Users, Shield, Edit, Plus, X } from "lucide-react"
+import { User, Phone, Heart, AlertTriangle, Users, Shield, Edit, Plus, X, Camera } from "lucide-react"
 
 export function HealthProfile() {
   const { user } = useAuth()
@@ -18,6 +18,15 @@ export function HealthProfile() {
   const [conditions, setConditions] = useState(["Hypertension", "Type 2 Diabetes"])
   const [newAllergy, setNewAllergy] = useState("")
   const [newCondition, setNewCondition] = useState("")
+  const [profileImage, setProfileImage] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const savedImage = localStorage.getItem('profileImage')
+    if (savedImage) {
+      setProfileImage(savedImage)
+    }
+  }, [])
 
   const addAllergy = () => {
     if (newAllergy.trim()) {
@@ -36,6 +45,23 @@ export function HealthProfile() {
   }
   const removeCondition = (index: number) => {
     setConditions(conditions.filter((_, i) => i !== index))
+  }
+
+  const handlePhotoChange = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const imageData = e.target?.result as string
+        setProfileImage(imageData)
+        localStorage.setItem('profileImage', imageData)
+      }
+      reader.readAsDataURL(file)
+    }
   }
   return (
     <div className="space-y-6">
@@ -67,15 +93,30 @@ export function HealthProfile() {
         <CardContent className="space-y-6">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
             <Avatar className="h-16 w-16 sm:h-20 sm:w-20">
-              <AvatarImage src="/placeholder.svg?height=80&width=80" />
+              <AvatarImage src={profileImage || "/placeholder.svg?height=80&width=80"} />
               <AvatarFallback className="text-lg">
                 {user ? `${user.firstName[0]}${user.lastName[0]}` : "JD"}
               </AvatarFallback>
             </Avatar>
             {isEditing && (
-              <Button variant="outline" size="sm" className="w-full sm:w-auto bg-transparent">
-                Change Photo
-              </Button>
+              <>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full sm:w-auto bg-transparent"
+                  onClick={handlePhotoChange}
+                >
+                  <Camera className="mr-2 h-4 w-4" />
+                  Change Photo
+                </Button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
+              </>
             )}
           </div>
 
