@@ -1,4 +1,3 @@
-
 "use client"
 
 import React from "react"
@@ -33,9 +32,50 @@ const upcomingAppointments = [
 
 export function Dashboard() {
   const [quickEntryOpen, setQuickEntryOpen] = React.useState(false);
+  const [remindersOpen, setRemindersOpen] = React.useState(false);
+  const [appointmentsOpen, setAppointmentsOpen] = React.useState(false);
+
+  const handleSetReminders = () => {
+    setRemindersOpen(true);
+    // TODO: Implement reminder setting functionality
+    console.log("Opening medication reminders modal");
+  };
+
+  const handleViewAllAppointments = () => {
+    setAppointmentsOpen(true);
+    // TODO: Implement view all appointments functionality
+    console.log("Opening appointments view");
+  };
+
   return (
     <div className="space-y-6 animate-slide-up">
       <QuickEntryModal open={quickEntryOpen} onOpenChange={setQuickEntryOpen} />
+      
+      {/* Temporary modals for reminders and appointments */}
+      {remindersOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setRemindersOpen(false)}>
+          <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4" onClick={e => e.stopPropagation()}>
+            <h3 className="text-lg font-semibold mb-4">Set Medication Reminders</h3>
+            <p className="text-gray-600 mb-4">Reminder functionality will be implemented here.</p>
+            <Button onClick={() => setRemindersOpen(false)} className="w-full">
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {appointmentsOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setAppointmentsOpen(false)}>
+          <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4" onClick={e => e.stopPropagation()}>
+            <h3 className="text-lg font-semibold mb-4">All Appointments</h3>
+            <p className="text-gray-600 mb-4">Complete appointments view will be implemented here.</p>
+            <Button onClick={() => setAppointmentsOpen(false)} className="w-full">
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="animate-fade-in">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -230,7 +270,7 @@ export function Dashboard() {
                 </div>
                 Today's Medications
               </CardTitle>
-              <Button variant="outline" size="sm" className="hover:bg-purple-50 hover:border-purple-300 transition-all duration-200">
+              <Button variant="outline" size="sm" className="hover:bg-purple-50 hover:border-purple-300 transition-all duration-200" onClick={handleSetReminders}>
                 <Bell className="mr-2 h-4 w-4" />
                 Set Reminders
               </Button>
@@ -267,7 +307,7 @@ export function Dashboard() {
                 </div>
                 Upcoming Appointments
               </CardTitle>
-              <Button variant="outline" size="sm" className="hover:bg-blue-50 hover:border-blue-300 transition-all duration-200">
+              <Button variant="outline" size="sm" className="hover:bg-blue-50 hover:border-blue-300 transition-all duration-200" onClick={handleViewAllAppointments}>
                 View All
               </Button>
             </div>
