@@ -7,6 +7,7 @@ interface User {
   email: string
   firstName: string
   lastName: string
+  mobileNumber: string
   createdAt: string
 }
 
@@ -15,7 +16,7 @@ interface AuthContextType {
   isAuthenticated: boolean
   isLoading: boolean
   login: (email: string, password: string) => Promise<boolean>
-  register: (email: string, password: string, firstName: string, lastName: string) => Promise<boolean>
+  register: (email: string, password: string, firstName: string, lastName: string, mobileNumber: string) => Promise<boolean>
   logout: () => void
 }
 
@@ -60,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const register = async (email: string, password: string, firstName: string, lastName: string): Promise<boolean> => {
+  const register = async (email: string, password: string, firstName: string, lastName: string, mobileNumber: string): Promise<boolean> => {
     try {
       // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -80,6 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password,
         firstName,
         lastName,
+        mobileNumber,
         createdAt: new Date().toISOString(),
       }
 

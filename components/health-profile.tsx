@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useAuth } from "@/components/auth-context"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User, Phone, Heart, AlertTriangle, Users, Shield, Edit, Plus, X } from "lucide-react"
 
 export function HealthProfile() {
+  const { user } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [allergies, setAllergies] = useState(["Penicillin", "Shellfish", "Pollen"])
   const [conditions, setConditions] = useState(["Hypertension", "Type 2 Diabetes"])
@@ -66,7 +68,9 @@ export function HealthProfile() {
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
             <Avatar className="h-16 w-16 sm:h-20 sm:w-20">
               <AvatarImage src="/placeholder.svg?height=80&width=80" />
-              <AvatarFallback className="text-lg">JD</AvatarFallback>
+              <AvatarFallback className="text-lg">
+                {user ? `${user.firstName[0]}${user.lastName[0]}` : "JD"}
+              </AvatarFallback>
             </Avatar>
             {isEditing && (
               <Button variant="outline" size="sm" className="w-full sm:w-auto bg-transparent">
@@ -80,8 +84,7 @@ export function HealthProfile() {
               <Label htmlFor="firstName" className="text-sm font-medium">First Name</Label>
               <Input
                 id="firstName"
-                defaultValue="Virat"
-
+                defaultValue={user?.firstName || ""}
                 disabled={!isEditing}
                 className={`${!isEditing ? "bg-gray-50" : ""} text-base`}
               />
@@ -90,7 +93,7 @@ export function HealthProfile() {
               <Label htmlFor="lastName" className="text-sm font-medium">Last Name</Label>
               <Input
                 id="lastName"
-                defaultValue="Kohali"
+                defaultValue={user?.lastName || ""}
                 disabled={!isEditing}
                 className={`${!isEditing ? "bg-gray-50" : ""} text-base`}
               />
@@ -160,7 +163,7 @@ export function HealthProfile() {
               <Label htmlFor="phone">Phone</Label>
               <Input
                 id="phone"
-                defaultValue="+1 (555) 123-4567"
+                defaultValue={user?.mobileNumber || ""}
                 disabled={!isEditing}
                 className={!isEditing ? "bg-gray-50" : ""}
               />

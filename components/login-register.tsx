@@ -45,7 +45,7 @@ export function LoginRegister() {
           return
         }
 
-        const success = await register(formData.email, formData.password, formData.firstName, formData.lastName)
+        const success = await register(formData.email, formData.password, formData.firstName, formData.lastName, formData.mobileNumber)
         if (!success) {
           setError("Email already exists or registration failed")
         }
@@ -113,35 +113,55 @@ export function LoginRegister() {
           </CardHeader>
           <CardContent className="relative z-10">
             <form onSubmit={handleSubmit} className="space-y-4">
+
+
               {/* Name fields for registration */}
               {!isLogin && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName" className="text-sm font-medium">First Name</Label>
-                    <div className="relative group">
-                      <User className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors duration-200" />
-                      <Input
-                        id="firstName"
-                        name="firstName"
-                        type="text"
-                        placeholder="Enter First Name"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        className="pl-10 text-base glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
-                        required
-                      />
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName" className="text-sm font-medium">First Name</Label>
+                      <div className="relative group">
+                        <User className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors duration-200" />
+                        <Input
+                          id="firstName"
+                          name="firstName"
+                          type="text"
+                          placeholder="Enter First Name"
+                          value={formData.firstName}
+                          onChange={handleInputChange}
+                          className="pl-10 text-base glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName" className="text-sm font-medium">Last Name</Label>
+                      <div className="relative group">
+                        <User className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors duration-200" />
+                        <Input
+                          id="lastName"
+                          name="lastName"
+                          type="text"
+                          placeholder="Enter Last Name"
+                          value={formData.lastName}
+                          onChange={handleInputChange}
+                          className="pl-10 text-base glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
+                        />
+                      </div>
                     </div>
                   </div>
+                  {/* Mobile Number */}
                   <div className="space-y-2">
-                    <Label htmlFor="lastName" className="text-sm font-medium">Last Name</Label>
+                    <Label htmlFor="mobileNumber" className="text-sm font-medium">Mobile Number</Label>
                     <div className="relative group">
-                      <User className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors duration-200" />
+                      <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors duration-200" />
                       <Input
-                        id="lastName"
-                        name="lastName"
-                        type="text"
-                        placeholder="Enter Last Name"
-                        value={formData.lastName}
+                        id="mobileNumber"
+                        name="mobileNumber"
+                        type="tel"
+                        placeholder="Enter Your Mobile Number"
+                        value={formData.mobileNumber}
                         onChange={handleInputChange}
                         className="pl-10 text-base glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
                         required
@@ -152,33 +172,16 @@ export function LoginRegister() {
               )}
 
               {/* Email */}
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium">Email</Label>
-                  <div className="relative group">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors duration-200" />
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="Enter Your Email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="pl-10 text-base glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
-                      required
-                    />
-                  </div>
-                </div>
-              {/* Mobile Number */}
               <div className="space-y-2">
-                <Label htmlFor="mobileNumber" className="text-sm font-medium">Mobile Number</Label>
+                <Label htmlFor="email" className="text-sm font-medium">Email</Label>
                 <div className="relative group">
-                  <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors duration-200" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors duration-200" />
                   <Input
-                    id="mobileNumber"
-                    name="mobileNumber"
-                    type="tel"
-                    placeholder="Enter Your Mobile Number"
-                    value={formData.mobileNumber}
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="Enter Your Email"
+                    value={formData.email}
                     onChange={handleInputChange}
                     className="pl-10 text-base glass border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
                     required
