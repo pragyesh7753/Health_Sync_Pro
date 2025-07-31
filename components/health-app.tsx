@@ -10,11 +10,13 @@ import { HealthMetrics } from "@/components/health-metrics"
 import { AppointmentManagement } from "@/components/appointment-management"
 import { HealthRecords } from "@/components/health-records"
 import { NotificationSystem, useNotifications } from "@/components/notification-system"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 
 export function HealthApp() {
   const [activeTab, setActiveTab] = useState("dashboard")
   const { notifications, removeNotification, showSuccess } = useNotifications()
+  const isMobile = useIsMobile()
   
   // Show welcome notification on mount
   useEffect(() => {
@@ -49,7 +51,7 @@ export function HealthApp() {
   }
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={!isMobile}>
       <div className="flex mobile-viewport w-full bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 no-horizontal-scroll relative overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
