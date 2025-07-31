@@ -79,12 +79,19 @@ export function HealthMetrics() {
   const [calculatedBMI, setCalculatedBMI] = useState<number | null>(null)
 
   const calculateBMI = () => {
-    const height = Number.parseFloat(bmiHeight) / 100 // convert cm to m
-    const weight = Number.parseFloat(bmiWeight)
-    if (height && weight) {
-      const bmi = weight / (height * height)
-      setCalculatedBMI(Math.round(bmi * 10) / 10)
+    const height = parseFloat(bmiHeight)
+    const weight = parseFloat(bmiWeight)
+    
+    // Validate inputs
+    if (!height || !weight || height <= 0 || weight <= 0) {
+      alert('Please enter valid height and weight values')
+      return
     }
+    
+    // Convert cm to meters for calculation
+    const heightInMeters = height / 100
+    const bmi = weight / (heightInMeters * heightInMeters)
+    setCalculatedBMI(Math.round(bmi * 10) / 10)
   }
 
   const getBMICategory = (bmi: number) => {
@@ -239,14 +246,18 @@ export function HealthMetrics() {
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
             <div className="space-y-2">
               <Label htmlFor="height" className="text-sm font-medium">Height (cm)</Label>
-              <Input id="height" placeholder="175" value={bmiHeight} onChange={(e) => setBmiHeight(e.target.value)} className="text-base" />
+              <Input id="height" placeholder="Enter your Height" value={bmiHeight} onChange={(e) => setBmiHeight(e.target.value)} className="text-base" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="weight" className="text-sm font-medium">Weight (kg)</Label>
-              <Input id="weight" placeholder="70" value={bmiWeight} onChange={(e) => setBmiWeight(e.target.value)} className="text-base" />
+              <Input id="weight" placeholder="Enter your weight" value={bmiWeight} onChange={(e) => setBmiWeight(e.target.value)} className="text-base" />
             </div>
             <div className="flex items-end">
-              <Button onClick={calculateBMI} className="w-full bg-blue-600 hover:bg-blue-700 h-10">
+              <Button 
+                onClick={calculateBMI} 
+                className="w-full bg-blue-600 hover:bg-blue-700 h-10"
+                type="button"
+              >
                 Calculate BMI
               </Button>
             </div>
