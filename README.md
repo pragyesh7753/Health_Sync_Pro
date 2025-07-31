@@ -31,7 +31,7 @@ Health Sync Pro is a comprehensive, user-friendly health dashboard designed to h
 
 ## 🏗️ Tech Stack
 
-- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Framework**: [Next.js](https://nextjs.org/)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS, PostCSS
 - **UI Components**: Radix UI, custom components
@@ -181,12 +181,6 @@ You can use this documentation to create a presentation (PPT) with the following
 7. **How to Use**: Quick start and user journey
 8. **How to Contribute**: Invite for collaboration
 9. **Q&A / Contact**: For questions and support
-
----
-
-## 📝 License
-
-This project is licensed under the MIT License.
 
 ---
 
