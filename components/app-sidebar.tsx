@@ -65,7 +65,7 @@ export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
       <SidebarHeader className="border-b border-blue-200/50 p-3 sm:p-4 lg:p-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50"></div>
         <div className="flex items-center gap-2 sm:gap-3 relative z-10 group-data-[state=collapsed]:justify-center">
-          <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex-shrink-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 relative">
+          <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex-shrink-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 relative group-data-[state=collapsed]:hidden">
             <Stethoscope className="h-4 w-4 sm:h-5 sm:w-5 text-white animate-pulse" />
             <div className="absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-20"></div>
           </div>
@@ -92,7 +92,7 @@ export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
                     onClick={() => setActiveTab(item.id)}
                     isActive={activeTab === item.id}
                     tooltip={item.title}
-                    className={`w-full justify-start gap-2 sm:gap-3 px-2 sm:px-3 py-3 text-xs sm:text-sm transition-all duration-300 rounded-lg mx-2 group relative overflow-hidden group-data-[state=collapsed]:justify-center group-data-[state=collapsed]:px-2 ${
+                    className={`w-full justify-start gap-2 sm:gap-3 px-2 sm:px-3 py-3 text-xs sm:text-sm transition-all duration-300 rounded-lg mx-2 group relative overflow-visible z-30 group-data-[state=collapsed]:justify-center group-data-[state=collapsed]:px-2 ${
                       activeTab === item.id 
                         ? 'bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700' 
                         : 'text-gray-700 hover:bg-transparent'
