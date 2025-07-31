@@ -78,6 +78,12 @@ export function MedicationManagement() {
   const [medicationToDelete, setMedicationToDelete] = useState<number | null>(null)
   const [selectedMedication, setSelectedMedication] = useState<any>(null)
   const [todaySchedule, setTodaySchedule] = useState(initialTodaySchedule)
+  const [isRunningInteractionCheck, setIsRunningInteractionCheck] = useState(false)
+  const [interactionCheckResult, setInteractionCheckResult] = useState<any>(null)
+  const [refillReminders, setRefillReminders] = useState([
+    { id: 1, medication: "Vitamin D", daysUntilRefill: 3, reminderSet: false },
+    { id: 2, medication: "Lisinopril", daysUntilRefill: 8, reminderSet: false },
+  ])
 
   const handleMarkAsTaken = (id: number) => {
     setTodaySchedule((prev) =>
@@ -119,6 +125,45 @@ export function MedicationManagement() {
     setMedications((prev) =>
       prev.map((med) =>
         med.id === id ? { ...med, reminders: !med.reminders } : med
+      )
+    )
+  }
+
+  const handleRunInteractionCheck = async () => {
+    setIsRunningInteractionCheck(true)
+    
+    // Simulate API call delay
+    setTimeout(() => {
+      // Deterministic interaction check logic based on current medications
+      const currentMedNames = medications.map(med => med.name.toLowerCase())
+      const hasLisinoprilAndMetformin = currentMedNames.includes('lisinopril') && currentMedNames.includes('metformin')
+      
+      if (hasLisinoprilAndMetformin) {
+        setInteractionCheckResult({
+          hasInteractions: true,
+          interactions: [
+            {
+              medications: ["Lisinopril", "Metformin"],
+              severity: "Moderate",
+              description: "May increase risk of hypoglycemia when used together. Monitor blood glucose levels closely."
+            }
+          ]
+        })
+      } else {
+        setInteractionCheckResult({
+          hasInteractions: false,
+          message: "No interactions found"
+        })
+      }
+      
+      setIsRunningInteractionCheck(false)
+    }, 2000)
+  }
+
+  const handleSetReminder = (id: number) => {
+    setRefillReminders((prev) =>
+      prev.map((reminder) =>
+        reminder.id === id ? { ...reminder, reminderSet: true } : reminder
       )
     )
   }
@@ -244,9 +289,12 @@ export function MedicationManagement() {
                   <Input
                     id="editRemaining"
                     type="number"
-                    value={selectedMedication.remaining}
+                    value={selectedMedication.remaining || ''}
                     onChange={(e) =>
-                      setSelectedMedication({ ...selectedMedication, remaining: parseInt(e.target.value) })
+                      setSelectedMedication({ 
+                        ...selectedMedication, 
+                        remaining: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
+                      })
                     }
                   />
                 </div>
@@ -255,9 +303,12 @@ export function MedicationManagement() {
                   <Input
                     id="editTotal"
                     type="number"
-                    value={selectedMedication.total}
+                    value={selectedMedication.total || ''}
                     onChange={(e) =>
-                      setSelectedMedication({ ...selectedMedication, total: parseInt(e.target.value) })
+                      setSelectedMedication({ 
+                        ...selectedMedication, 
+                        total: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
+                      })
                     }
                   />
                 </div>
@@ -463,16 +514,60 @@ export function MedicationManagement() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <Button className="bg-blue-600 hover:bg-blue-700">Run Interaction Check</Button>
-            <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5 text-green-600" />
-                <p className="text-green-800 font-medium">No interactions found</p>
+            <Button 
+              className="bg-blue-600 hover:bg-blue-700" 
+              onClick={handleRunInteractionCheck}
+              disabled={isRunningInteractionCheck}
+            >
+              {isRunningInteractionCheck ? "Checking..." : "Run Interaction Check"}
+            </Button>
+            
+            {interactionCheckResult && !interactionCheckResult.hasInteractions && (
+              <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <p className="text-green-800 font-medium">No interactions found</p>
+                </div>
+                <p className="text-sm text-green-700 mt-1">
+                  Your current medications appear to be safe to take together.
+                </p>
               </div>
-              <p className="text-sm text-green-700 mt-1">
-                Your current medications appear to be safe to take together.
-              </p>
-            </div>
+            )}
+
+            {interactionCheckResult && interactionCheckResult.hasInteractions && (
+              <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                <div className="flex items-center gap-2 mb-3">
+                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                  <p className="text-red-800 font-medium">Potential interactions found</p>
+                </div>
+                <div className="space-y-3">
+                  {interactionCheckResult.interactions.map((interaction: any, index: number) => (
+                    <div key={index} className="p-3 bg-white rounded border border-red-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Badge variant="destructive" className="text-xs">
+                          {interaction.severity}
+                        </Badge>
+                        <p className="text-sm font-medium">
+                          {interaction.medications.join(" + ")}
+                        </p>
+                      </div>
+                      <p className="text-sm text-gray-700">{interaction.description}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-sm text-red-700 mt-3">
+                  Please consult with your healthcare provider about these potential interactions.
+                </p>
+              </div>
+            )}
+
+            {!interactionCheckResult && !isRunningInteractionCheck && (
+              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <p className="text-gray-600 text-sm">
+                  Click "Run Interaction Check" to analyze your current medications for potential interactions.
+                </p>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -488,24 +583,43 @@ export function MedicationManagement() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-              <div>
-                <p className="font-medium text-yellow-800">Vitamin D</p>
-                <p className="text-sm text-yellow-700">Refill needed in 3 days</p>
+            {refillReminders.map((reminder) => (
+              <div 
+                key={reminder.id}
+                className={`flex items-center justify-between p-3 rounded-lg border ${
+                  reminder.daysUntilRefill <= 3 
+                    ? "bg-yellow-50 border-yellow-200" 
+                    : "bg-gray-50 border-gray-200"
+                }`}
+              >
+                <div>
+                  <p className={`font-medium ${
+                    reminder.daysUntilRefill <= 3 ? "text-yellow-800" : "text-gray-900"
+                  }`}>
+                    {reminder.medication}
+                  </p>
+                  <p className={`text-sm ${
+                    reminder.daysUntilRefill <= 3 ? "text-yellow-700" : "text-gray-600"
+                  }`}>
+                    Refill needed in {reminder.daysUntilRefill} days
+                  </p>
+                </div>
+                {reminder.reminderSet ? (
+                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    <Bell className="mr-1 h-3 w-3" />
+                    Reminder Set
+                  </Badge>
+                ) : (
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => handleSetReminder(reminder.id)}
+                  >
+                    Set Reminder
+                  </Button>
+                )}
               </div>
-              <Button size="sm" variant="outline">
-                Set Reminder
-              </Button>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <div>
-                <p className="font-medium">Lisinopril</p>
-                <p className="text-sm text-gray-600">Refill needed in 8 days</p>
-              </div>
-              <Button size="sm" variant="outline">
-                Set Reminder
-              </Button>
-            </div>
+            ))}
           </div>
         </CardContent>
       </Card>
