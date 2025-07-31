@@ -21,7 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-const medications = [
+const initialMedications = [
   {
     id: 1,
     name: "Lisinopril",
@@ -71,13 +71,55 @@ const initialTodaySchedule = [
 ]
 
 export function MedicationManagement() {
+  const [medications, setMedications] = useState(initialMedications)
   const [isAddingMedication, setIsAddingMedication] = useState(false)
+  const [isEditingMedication, setIsEditingMedication] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [medicationToDelete, setMedicationToDelete] = useState<number | null>(null)
   const [selectedMedication, setSelectedMedication] = useState<any>(null)
   const [todaySchedule, setTodaySchedule] = useState(initialTodaySchedule)
 
   const handleMarkAsTaken = (id: number) => {
     setTodaySchedule((prev) =>
       prev.map((item) => (item.id === id ? { ...item, taken: true } : item))
+    )
+  }
+
+  const handleEditMedication = (medication: any) => {
+    setSelectedMedication(medication)
+    setIsEditingMedication(true)
+  }
+
+  const handleDeleteMedication = (id: number) => {
+    setMedicationToDelete(id)
+    setIsDeleteDialogOpen(true)
+  }
+
+  const confirmDeleteMedication = () => {
+    if (medicationToDelete) {
+      setMedications((prev) => prev.filter((med) => med.id !== medicationToDelete))
+      setIsDeleteDialogOpen(false)
+      setMedicationToDelete(null)
+    }
+  }
+
+  const handleSaveEdit = () => {
+    if (selectedMedication) {
+      setMedications((prev) =>
+        prev.map((med) =>
+          med.id === selectedMedication.id ? selectedMedication : med
+        )
+      )
+      setIsEditingMedication(false)
+      setSelectedMedication(null)
+    }
+  }
+
+  const handleToggleReminders = (id: number) => {
+    setMedications((prev) =>
+      prev.map((med) =>
+        med.id === id ? { ...med, reminders: !med.reminders } : med
+      )
     )
   }
 
@@ -144,6 +186,125 @@ export function MedicationManagement() {
           </DialogContent>
         </Dialog>
       </div>
+
+      {/* Edit Medication Dialog */}
+      <Dialog open={isEditingMedication} onOpenChange={setIsEditingMedication}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit Medication</DialogTitle>
+            <DialogDescription>Update the medication details</DialogDescription>
+          </DialogHeader>
+          {selectedMedication && (
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="editMedName">Medication Name</Label>
+                <Input
+                  id="editMedName"
+                  value={selectedMedication.name}
+                  onChange={(e) =>
+                    setSelectedMedication({ ...selectedMedication, name: e.target.value })
+                  }
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="editDosage">Dosage</Label>
+                  <Input
+                    id="editDosage"
+                    value={selectedMedication.dosage}
+                    onChange={(e) =>
+                      setSelectedMedication({ ...selectedMedication, dosage: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="editFrequency">Frequency</Label>
+                  <Input
+                    id="editFrequency"
+                    value={selectedMedication.frequency}
+                    onChange={(e) =>
+                      setSelectedMedication({ ...selectedMedication, frequency: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="editTime">Time(s)</Label>
+                <Input
+                  id="editTime"
+                  value={selectedMedication.time}
+                  onChange={(e) =>
+                    setSelectedMedication({ ...selectedMedication, time: e.target.value })
+                  }
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="editRemaining">Remaining</Label>
+                  <Input
+                    id="editRemaining"
+                    type="number"
+                    value={selectedMedication.remaining}
+                    onChange={(e) =>
+                      setSelectedMedication({ ...selectedMedication, remaining: parseInt(e.target.value) })
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="editTotal">Total</Label>
+                  <Input
+                    id="editTotal"
+                    type="number"
+                    value={selectedMedication.total}
+                    onChange={(e) =>
+                      setSelectedMedication({ ...selectedMedication, total: parseInt(e.target.value) })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="editRefillDate">Refill Date</Label>
+                <Input
+                  id="editRefillDate"
+                  type="date"
+                  value={selectedMedication.refillDate}
+                  onChange={(e) =>
+                    setSelectedMedication({ ...selectedMedication, refillDate: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditingMedication(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveEdit} className="bg-blue-600 hover:bg-blue-700">
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Delete Medication</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this medication? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmDeleteMedication}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Today's Schedule */}
       <Card>
@@ -236,7 +397,10 @@ export function MedicationManagement() {
                       <div>
                         <p className="text-sm text-gray-600">Reminders</p>
                         <div className="flex items-center gap-2">
-                          <Switch checked={med.reminders} />
+                          <Switch 
+                            checked={med.reminders} 
+                            onCheckedChange={() => handleToggleReminders(med.id)}
+                          />
                           <Bell className="h-4 w-4 text-gray-400" />
                         </div>
                       </div>
@@ -264,10 +428,20 @@ export function MedicationManagement() {
                   </div>
 
                   <div className="flex gap-2 flex-shrink-0">
-                    <Button variant="outline" size="sm" className="p-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="p-2"
+                      onClick={() => handleEditMedication(med)}
+                    >
                       <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
-                    <Button variant="outline" size="sm" className="p-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="p-2"
+                      onClick={() => handleDeleteMedication(med.id)}
+                    >
                       <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
                   </div>
