@@ -8,6 +8,7 @@ import { EnhancedProgress } from "@/components/enhanced-progress"
 import { QuickEntryModal } from "@/components/quick-entry-modal"
 import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Bell } from "lucide-react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
 const healthData = [
   { date: "Mon", steps: 8500, heartRate: 72, weight: 70.2 },
@@ -77,12 +78,12 @@ export function Dashboard() {
       )}
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="animate-fade-in">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Health Dashboard
-          </h1>
-          <p className="text-gray-600 text-sm sm:text-base mt-1">Welcome back! Here's your health overview for today.</p>
-        </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Health Dashboard
+            </h1>
+            <p className="text-gray-600 text-sm sm:text-base mt-1">Welcome back! Here's your health overview for today.</p>
+          </div>
         <Button
           className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           onClick={() => setQuickEntryOpen(true)}
