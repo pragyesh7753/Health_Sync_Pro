@@ -21,7 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-const initialMedications = [
+const medications = [
   {
     id: 1,
     name: "Lisinopril",
@@ -63,110 +63,16 @@ const initialMedications = [
   },
 ]
 
-const initialTodaySchedule = [
-  { id: 1, medication: "Lisinopril", time: "8:00 AM", taken: true },
-  { id: 2, medication: "Metformin", time: "8:00 AM", taken: true },
-  { id: 3, medication: "Metformin", time: "8:00 PM", taken: false },
-  { id: 4, medication: "Vitamin D", time: "6:00 PM", taken: false },
+const todaySchedule = [
+  { medication: "Lisinopril", time: "8:00 AM", taken: true },
+  { medication: "Metformin", time: "8:00 AM", taken: true },
+  { medication: "Metformin", time: "8:00 PM", taken: false },
+  { medication: "Vitamin D", time: "6:00 PM", taken: false },
 ]
 
 export function MedicationManagement() {
-  const [medications, setMedications] = useState(initialMedications)
   const [isAddingMedication, setIsAddingMedication] = useState(false)
-  const [isEditingMedication, setIsEditingMedication] = useState(false)
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const [medicationToDelete, setMedicationToDelete] = useState<number | null>(null)
   const [selectedMedication, setSelectedMedication] = useState<any>(null)
-  const [todaySchedule, setTodaySchedule] = useState(initialTodaySchedule)
-  const [isRunningInteractionCheck, setIsRunningInteractionCheck] = useState(false)
-  const [interactionCheckResult, setInteractionCheckResult] = useState<any>(null)
-  const [refillReminders, setRefillReminders] = useState([
-    { id: 1, medication: "Vitamin D", daysUntilRefill: 3, reminderSet: false },
-    { id: 2, medication: "Lisinopril", daysUntilRefill: 8, reminderSet: false },
-  ])
-
-  const handleMarkAsTaken = (id: number) => {
-    setTodaySchedule((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, taken: true } : item))
-    )
-  }
-
-  const handleEditMedication = (medication: any) => {
-    setSelectedMedication(medication)
-    setIsEditingMedication(true)
-  }
-
-  const handleDeleteMedication = (id: number) => {
-    setMedicationToDelete(id)
-    setIsDeleteDialogOpen(true)
-  }
-
-  const confirmDeleteMedication = () => {
-    if (medicationToDelete) {
-      setMedications((prev) => prev.filter((med) => med.id !== medicationToDelete))
-      setIsDeleteDialogOpen(false)
-      setMedicationToDelete(null)
-    }
-  }
-
-  const handleSaveEdit = () => {
-    if (selectedMedication) {
-      setMedications((prev) =>
-        prev.map((med) =>
-          med.id === selectedMedication.id ? selectedMedication : med
-        )
-      )
-      setIsEditingMedication(false)
-      setSelectedMedication(null)
-    }
-  }
-
-  const handleToggleReminders = (id: number) => {
-    setMedications((prev) =>
-      prev.map((med) =>
-        med.id === id ? { ...med, reminders: !med.reminders } : med
-      )
-    )
-  }
-
-  const handleRunInteractionCheck = async () => {
-    setIsRunningInteractionCheck(true)
-    
-    // Simulate API call delay
-    setTimeout(() => {
-      // Deterministic interaction check logic based on current medications
-      const currentMedNames = medications.map(med => med.name.toLowerCase())
-      const hasLisinoprilAndMetformin = currentMedNames.includes('lisinopril') && currentMedNames.includes('metformin')
-      
-      if (hasLisinoprilAndMetformin) {
-        setInteractionCheckResult({
-          hasInteractions: true,
-          interactions: [
-            {
-              medications: ["Lisinopril", "Metformin"],
-              severity: "Moderate",
-              description: "May increase risk of hypoglycemia when used together. Monitor blood glucose levels closely."
-            }
-          ]
-        })
-      } else {
-        setInteractionCheckResult({
-          hasInteractions: false,
-          message: "No interactions found"
-        })
-      }
-      
-      setIsRunningInteractionCheck(false)
-    }, 2000)
-  }
-
-  const handleSetReminder = (id: number) => {
-    setRefillReminders((prev) =>
-      prev.map((reminder) =>
-        reminder.id === id ? { ...reminder, reminderSet: true } : reminder
-      )
-    )
-  }
 
   return (
     <div className="space-y-6">
@@ -232,131 +138,6 @@ export function MedicationManagement() {
         </Dialog>
       </div>
 
-      {/* Edit Medication Dialog */}
-      <Dialog open={isEditingMedication} onOpenChange={setIsEditingMedication}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Edit Medication</DialogTitle>
-            <DialogDescription>Update the medication details</DialogDescription>
-          </DialogHeader>
-          {selectedMedication && (
-            <div className="grid gap-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="editMedName">Medication Name</Label>
-                <Input
-                  id="editMedName"
-                  value={selectedMedication.name}
-                  onChange={(e) =>
-                    setSelectedMedication({ ...selectedMedication, name: e.target.value })
-                  }
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="editDosage">Dosage</Label>
-                  <Input
-                    id="editDosage"
-                    value={selectedMedication.dosage}
-                    onChange={(e) =>
-                      setSelectedMedication({ ...selectedMedication, dosage: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="editFrequency">Frequency</Label>
-                  <Input
-                    id="editFrequency"
-                    value={selectedMedication.frequency}
-                    onChange={(e) =>
-                      setSelectedMedication({ ...selectedMedication, frequency: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="editTime">Time(s)</Label>
-                <Input
-                  id="editTime"
-                  value={selectedMedication.time}
-                  onChange={(e) =>
-                    setSelectedMedication({ ...selectedMedication, time: e.target.value })
-                  }
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="editRemaining">Remaining</Label>
-                  <Input
-                    id="editRemaining"
-                    type="number"
-                    value={selectedMedication.remaining || ''}
-                    onChange={(e) =>
-                      setSelectedMedication({ 
-                        ...selectedMedication, 
-                        remaining: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
-                      })
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="editTotal">Total</Label>
-                  <Input
-                    id="editTotal"
-                    type="number"
-                    value={selectedMedication.total || ''}
-                    onChange={(e) =>
-                      setSelectedMedication({ 
-                        ...selectedMedication, 
-                        total: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
-                      })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="editRefillDate">Refill Date</Label>
-                <Input
-                  id="editRefillDate"
-                  type="date"
-                  value={selectedMedication.refillDate}
-                  onChange={(e) =>
-                    setSelectedMedication({ ...selectedMedication, refillDate: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditingMedication(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSaveEdit} className="bg-blue-600 hover:bg-blue-700">
-              Save Changes
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Delete Medication</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this medication? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={confirmDeleteMedication}>
-              Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
       {/* Today's Schedule */}
       <Card>
         <CardHeader>
@@ -368,9 +149,9 @@ export function MedicationManagement() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {todaySchedule.map((item) => (
+            {todaySchedule.map((item, index) => (
               <div
-                key={item.id}
+                key={index}
                 className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 rounded-lg border gap-3 sm:gap-4"
               >
                 <div className="flex items-center gap-4 flex-1">
@@ -387,11 +168,7 @@ export function MedicationManagement() {
                       Taken
                     </Badge>
                   ) : (
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700"
-                      onClick={() => handleMarkAsTaken(item.id)}
-                    >
+                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
                       Mark as Taken
                     </Button>
                   )}
@@ -448,10 +225,7 @@ export function MedicationManagement() {
                       <div>
                         <p className="text-sm text-gray-600">Reminders</p>
                         <div className="flex items-center gap-2">
-                          <Switch 
-                            checked={med.reminders} 
-                            onCheckedChange={() => handleToggleReminders(med.id)}
-                          />
+                          <Switch checked={med.reminders} />
                           <Bell className="h-4 w-4 text-gray-400" />
                         </div>
                       </div>
@@ -479,20 +253,10 @@ export function MedicationManagement() {
                   </div>
 
                   <div className="flex gap-2 flex-shrink-0">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="p-2"
-                      onClick={() => handleEditMedication(med)}
-                    >
+                    <Button variant="outline" size="sm" className="p-2">
                       <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="p-2"
-                      onClick={() => handleDeleteMedication(med.id)}
-                    >
+                    <Button variant="outline" size="sm" className="p-2">
                       <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
                   </div>
@@ -514,60 +278,16 @@ export function MedicationManagement() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <Button 
-              className="bg-blue-600 hover:bg-blue-700" 
-              onClick={handleRunInteractionCheck}
-              disabled={isRunningInteractionCheck}
-            >
-              {isRunningInteractionCheck ? "Checking..." : "Run Interaction Check"}
-            </Button>
-            
-            {interactionCheckResult && !interactionCheckResult.hasInteractions && (
-              <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
-                  <p className="text-green-800 font-medium">No interactions found</p>
-                </div>
-                <p className="text-sm text-green-700 mt-1">
-                  Your current medications appear to be safe to take together.
-                </p>
+            <Button className="bg-blue-600 hover:bg-blue-700">Run Interaction Check</Button>
+            <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-600" />
+                <p className="text-green-800 font-medium">No interactions found</p>
               </div>
-            )}
-
-            {interactionCheckResult && interactionCheckResult.hasInteractions && (
-              <div className="p-4 bg-red-50 rounded-lg border border-red-200">
-                <div className="flex items-center gap-2 mb-3">
-                  <AlertTriangle className="h-5 w-5 text-red-600" />
-                  <p className="text-red-800 font-medium">Potential interactions found</p>
-                </div>
-                <div className="space-y-3">
-                  {interactionCheckResult.interactions.map((interaction: any, index: number) => (
-                    <div key={index} className="p-3 bg-white rounded border border-red-200">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="destructive" className="text-xs">
-                          {interaction.severity}
-                        </Badge>
-                        <p className="text-sm font-medium">
-                          {interaction.medications.join(" + ")}
-                        </p>
-                      </div>
-                      <p className="text-sm text-gray-700">{interaction.description}</p>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-sm text-red-700 mt-3">
-                  Please consult with your healthcare provider about these potential interactions.
-                </p>
-              </div>
-            )}
-
-            {!interactionCheckResult && !isRunningInteractionCheck && (
-              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <p className="text-gray-600 text-sm">
-                  Click "Run Interaction Check" to analyze your current medications for potential interactions.
-                </p>
-              </div>
-            )}
+              <p className="text-sm text-green-700 mt-1">
+                Your current medications appear to be safe to take together.
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -583,43 +303,24 @@ export function MedicationManagement() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {refillReminders.map((reminder) => (
-              <div 
-                key={reminder.id}
-                className={`flex items-center justify-between p-3 rounded-lg border ${
-                  reminder.daysUntilRefill <= 3 
-                    ? "bg-yellow-50 border-yellow-200" 
-                    : "bg-gray-50 border-gray-200"
-                }`}
-              >
-                <div>
-                  <p className={`font-medium ${
-                    reminder.daysUntilRefill <= 3 ? "text-yellow-800" : "text-gray-900"
-                  }`}>
-                    {reminder.medication}
-                  </p>
-                  <p className={`text-sm ${
-                    reminder.daysUntilRefill <= 3 ? "text-yellow-700" : "text-gray-600"
-                  }`}>
-                    Refill needed in {reminder.daysUntilRefill} days
-                  </p>
-                </div>
-                {reminder.reminderSet ? (
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
-                    <Bell className="mr-1 h-3 w-3" />
-                    Reminder Set
-                  </Badge>
-                ) : (
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    onClick={() => handleSetReminder(reminder.id)}
-                  >
-                    Set Reminder
-                  </Button>
-                )}
+            <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+              <div>
+                <p className="font-medium text-yellow-800">Vitamin D</p>
+                <p className="text-sm text-yellow-700">Refill needed in 3 days</p>
               </div>
-            ))}
+              <Button size="sm" variant="outline">
+                Set Reminder
+              </Button>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div>
+                <p className="font-medium">Lisinopril</p>
+                <p className="text-sm text-gray-600">Refill needed in 8 days</p>
+              </div>
+              <Button size="sm" variant="outline">
+                Set Reminder
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

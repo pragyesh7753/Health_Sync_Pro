@@ -253,7 +253,7 @@ export function HealthMetrics() {
               <Input id="weight" placeholder="Enter your weight" value={bmiWeight} onChange={(e) => setBmiWeight(e.target.value)} className="text-base" />
             </div>
             <div className="flex items-end">
-              <Button 
+              <Button
                 onClick={calculateBMI} 
                 className="w-full bg-blue-600 hover:bg-blue-700 h-10"
                 type="button"
