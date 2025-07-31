@@ -63,16 +63,23 @@ const medications = [
   },
 ]
 
-const todaySchedule = [
-  { medication: "Lisinopril", time: "8:00 AM", taken: true },
-  { medication: "Metformin", time: "8:00 AM", taken: true },
-  { medication: "Metformin", time: "8:00 PM", taken: false },
-  { medication: "Vitamin D", time: "6:00 PM", taken: false },
+const initialTodaySchedule = [
+  { id: 1, medication: "Lisinopril", time: "8:00 AM", taken: true },
+  { id: 2, medication: "Metformin", time: "8:00 AM", taken: true },
+  { id: 3, medication: "Metformin", time: "8:00 PM", taken: false },
+  { id: 4, medication: "Vitamin D", time: "6:00 PM", taken: false },
 ]
 
 export function MedicationManagement() {
   const [isAddingMedication, setIsAddingMedication] = useState(false)
   const [selectedMedication, setSelectedMedication] = useState<any>(null)
+  const [todaySchedule, setTodaySchedule] = useState(initialTodaySchedule)
+
+  const handleMarkAsTaken = (id: number) => {
+    setTodaySchedule((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, taken: true } : item))
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -149,9 +156,9 @@ export function MedicationManagement() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {todaySchedule.map((item, index) => (
+            {todaySchedule.map((item) => (
               <div
-                key={index}
+                key={item.id}
                 className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 rounded-lg border gap-3 sm:gap-4"
               >
                 <div className="flex items-center gap-4 flex-1">
@@ -168,7 +175,11 @@ export function MedicationManagement() {
                       Taken
                     </Badge>
                   ) : (
-                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                    <Button
+                      size="sm"
+                      className="bg-blue-600 hover:bg-blue-700"
+                      onClick={() => handleMarkAsTaken(item.id)}
+                    >
                       Mark as Taken
                     </Button>
                   )}
