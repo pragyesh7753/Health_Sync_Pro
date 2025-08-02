@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Stethoscope, Eye, EyeOff, Mail, Lock, User,Phone, AlertCircle } from "lucide-react"
+import { Stethoscope, Eye, EyeOff, Mail, Lock, User, Phone, AlertCircle } from "lucide-react"
 import { useAuth } from "@/components/auth-context"
 
 export function LoginRegister() {
@@ -69,11 +69,11 @@ export function LoginRegister() {
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full animate-float"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-indigo-400/10 to-pink-400/10 rounded-full animate-float" style={{animationDelay: '2s'}}></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-indigo-400/10 to-pink-400/10 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
         <div className="absolute top-1/4 right-1/4 w-32 h-32 bg-gradient-to-r from-cyan-400/5 to-blue-400/5 rounded-full animate-pulse-slow"></div>
-        <div className="absolute bottom-1/4 left-1/4 w-24 h-24 bg-gradient-to-r from-purple-400/5 to-pink-400/5 rounded-full animate-pulse-slow" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-1/4 left-1/4 w-24 h-24 bg-gradient-to-r from-purple-400/5 to-pink-400/5 rounded-full animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
       </div>
-      
+
       <div className="w-full max-w-md relative z-10">
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8 animate-fade-in">
@@ -92,7 +92,7 @@ export function LoginRegister() {
           <h2 className="text-lg sm:text-xl font-semibold text-gray-800 animate-bounce-subtle">
             {isLogin ? "Welcome back" : "Create your account"}
           </h2>
-          <p className="text-sm sm:text-base text-gray-600 mt-1 animate-fade-in" style={{animationDelay: '0.2s'}}>
+          <p className="text-sm sm:text-base text-gray-600 mt-1 animate-fade-in" style={{ animationDelay: '0.2s' }}>
             {isLogin ? "Sign in to access your health dashboard" : "Join us to start managing your health"}
           </p>
         </div>
@@ -243,9 +243,9 @@ export function LoginRegister() {
               )}
 
               {/* Submit Button */}
-              <Button 
-                type="submit" 
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 h-11 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 font-semibold" 
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 h-11 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 font-semibold"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -296,31 +296,6 @@ export function LoginRegister() {
             )}
           </CardContent>
         </Card>
-
-        {/* Features */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-          <div className="p-4 glass rounded-lg hover-lift interactive-card animate-scale-in" style={{animationDelay: '0.1s'}}>
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-3 hover:scale-110 transition-transform duration-300 relative">
-              <Stethoscope className="h-5 w-5 text-blue-600 animate-pulse" />
-              <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-20"></div>
-            </div>
-            <p className="text-sm font-semibold text-gray-700">Health Tracking</p>
-          </div>
-          <div className="p-4 glass rounded-lg hover-lift interactive-card animate-scale-in" style={{animationDelay: '0.2s'}}>
-            <div className="w-10 h-10 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mx-auto mb-3 hover:scale-110 transition-transform duration-300 relative">
-              <Lock className="h-5 w-5 text-green-600 animate-bounce-subtle" />
-              <div className="absolute inset-0 bg-green-400 rounded-full animate-ping opacity-20"></div>
-            </div>
-            <p className="text-sm font-semibold text-gray-700">Secure & Private</p>
-          </div>
-          <div className="p-4 glass rounded-lg hover-lift interactive-card animate-scale-in" style={{animationDelay: '0.3s'}}>
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center mx-auto mb-3 hover:scale-110 transition-transform duration-300 relative">
-              <User className="h-5 w-5 text-purple-600 animate-pulse" />
-              <div className="absolute inset-0 bg-purple-400 rounded-full animate-ping opacity-20"></div>
-            </div>
-            <p className="text-sm font-semibold text-gray-700">Personal Care</p>
-          </div>
-        </div>
       </div>
     </div>
   )
