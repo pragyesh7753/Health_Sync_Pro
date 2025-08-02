@@ -7,7 +7,7 @@ interface EnhancedLoadingProps {
   submessage?: string
 }
 
-export function EnhancedLoading({ 
+export function LoadingScreen({ 
   message = "Loading HealthSync Pro", 
   submessage = "Preparing your personalized health dashboard..." 
 }: EnhancedLoadingProps) {

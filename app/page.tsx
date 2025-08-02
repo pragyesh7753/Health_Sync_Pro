@@ -2,7 +2,7 @@
 import { AuthProvider, useAuth } from "@/components/auth-context"
 import { LoginRegister } from "@/components/login-register"
 import { HealthApp } from "@/components/health-app"
-import { EnhancedLoading } from "@/components/enhanced-loading"
+import { LoadingScreen } from "@/components/loading"
 import { useState, useEffect } from "react"
 
 function AppContent() {
@@ -20,7 +20,7 @@ function AppContent() {
 
   // Show loading if either auth is loading or app is loading
   if (isLoading || showAppLoading) {
-    return <EnhancedLoading message="Loading HealthSync Pro" submessage="Initializing your health dashboard..." />
+    return <LoadingScreen message="Loading HealthSync Pro" submessage="Initializing your health dashboard..." />
   }
 
   return isAuthenticated ? <HealthApp /> : <LoginRegister />

@@ -72,14 +72,31 @@ export function HealthProfile() {
             Manage your personal health information and medical history
           </p>
         </div>
-        <Button
-          onClick={() => setIsEditing(!isEditing)}
-          variant={isEditing ? "outline" : "default"}
-          className={`w-full sm:w-auto ${isEditing ? "" : "bg-blue-600 hover:bg-blue-700"}`}
-        >
-          <Edit className="mr-2 h-4 w-4" />
-          {isEditing ? "Cancel" : "Edit Profile"}
-        </Button>
+        {!isEditing ? (
+          <Button
+            onClick={() => setIsEditing(true)}
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700"
+          >
+            <Edit className="mr-2 h-4 w-4" />
+            Edit Profile
+          </Button>
+        ) : (
+          <div className="flex gap-2 w-full sm:w-auto">
+            <Button
+              variant="outline"
+              onClick={() => setIsEditing(false)}
+              className="flex-1 sm:flex-none"
+            >
+              Cancel
+            </Button>
+            <Button
+              className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700"
+              onClick={() => setIsEditing(false)}
+            >
+              Save Changes
+            </Button>
+          </div>
+        )}
       </div>
       {/* Personal Information */}
       <Card>
@@ -404,17 +421,6 @@ export function HealthProfile() {
           </div>
         </CardContent>
       </Card>
-
-      {isEditing && (
-        <div className="flex justify-end gap-4">
-          <Button variant="outline" onClick={() => setIsEditing(false)}>
-            Cancel
-          </Button>
-          <Button className="bg-blue-600 hover:bg-blue-700" onClick={() => setIsEditing(false)}>
-            Save Changes
-          </Button>
-        </div>
-      )}
     </div>
   )
 }
