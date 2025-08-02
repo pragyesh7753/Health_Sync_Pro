@@ -44,6 +44,7 @@ import {
 } from "@/components/ui/dialog"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { format } from "date-fns"
+import { useToast } from "@/hooks/use-toast"
 
 const upcomingAppointments = [
   {
@@ -137,9 +138,14 @@ export function AppointmentManagement() {
   const [isDeleting, setIsDeleting] = useState(false)
   const [deletingAppointment, setDeletingAppointment] = useState<any>(null)
   const [appointments, setAppointments] = useState(upcomingAppointments)
+  const { toast } = useToast()
 
   const handleBellClick = (appointmentId: number) => {
-    alert(`Reminder set for appointment #${appointmentId}`)
+    toast({
+      title: "Reminder Set",
+      description: `Reminder set for appointment #${appointmentId}`,
+      duration: 3000,
+    })
     // Here you would typically implement actual reminder functionality
   }
 
@@ -160,6 +166,11 @@ export function AppointmentManagement() {
       )
       setIsDeleting(false)
       setDeletingAppointment(null)
+      toast({
+        title: "Appointment Deleted",
+        description: "The appointment has been successfully deleted.",
+        duration: 3000,
+      })
     }
   }
 
@@ -172,18 +183,33 @@ export function AppointmentManagement() {
       )
       setIsEditing(false)
       setEditingAppointment(null)
+      toast({
+        title: "Appointment Updated",
+        description: "Your appointment has been successfully updated.",
+        duration: 3000,
+      })
     }
   }
 
   const handleBookAppointment = () => {
     if (!selectedDoctor || !selectedDate || !selectedTime || !visitReason) {
-      alert('Please fill in all required fields')
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+        duration: 3000,
+      })
       return
     }
 
     const selectedDoctorInfo = doctors.find(doc => doc.name === selectedDoctor)
     if (!selectedDoctorInfo) {
-      alert('Please select a valid doctor')
+      toast({
+        title: "Invalid Selection",
+        description: "Please select a valid doctor",
+        variant: "destructive",
+        duration: 3000,
+      })
       return
     }
 
@@ -208,12 +234,32 @@ export function AppointmentManagement() {
     setVisitReason("")
     setIsBooking(false)
     
-    alert('Appointment booked successfully!')
+    toast({
+      title: "Appointment Booked",
+      description: "Your appointment has been booked successfully!",
+      duration: 3000,
+    })
   }
 
   const handleDoctorBooking = (doctorName: string) => {
     setSelectedDoctor(doctorName)
     setIsBooking(true)
+  }
+
+  const handleSnoozeReminder = (doctorName: string) => {
+    toast({
+      title: "Reminder Snoozed",
+      description: `Reminder for ${doctorName} has been snoozed for 1 hour.`,
+      duration: 3000,
+    })
+  }
+
+  const handleSetReminder = (doctorName: string) => {
+    toast({
+      title: "Reminder Set",
+      description: `Reminder has been set for your appointment with ${doctorName}.`,
+      duration: 3000,
+    })
   }
 
   return (
@@ -543,7 +589,11 @@ export function AppointmentManagement() {
                   Cardiology appointment at 2:00 PM
                 </p>
               </div>
-              <Button size="sm" variant="outline">
+              <Button 
+                size="sm" 
+                variant="outline"
+                onClick={() => handleSnoozeReminder("Dr. Sarah Johnson")}
+              >
                 Snooze
               </Button>
             </div>
@@ -556,7 +606,11 @@ export function AppointmentManagement() {
                   General Practice appointment at 10:30 AM
                 </p>
               </div>
-              <Button size="sm" variant="outline">
+              <Button 
+                size="sm" 
+                variant="outline"
+                onClick={() => handleSetReminder("Dr. Michael Chen")}
+              >
                 Set Reminder
               </Button>
             </div>

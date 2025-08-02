@@ -17,8 +17,37 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { useToast } from "@/hooks/use-toast"
 
-const medicalDocuments = [
+interface MedicalDocument {
+  id: number
+  name: string
+  type: string
+  date: string
+  doctor: string
+  size: string
+  category: string
+}
+
+interface Vaccination {
+  vaccine: string
+  date: string
+  nextDue: string
+  status: string
+}
+
+const medicalDocuments: MedicalDocument[] = [
   {
     id: 1,
     name: "Blood Test Results - January 2024",
@@ -80,7 +109,7 @@ const labResults = [
   },
 ]
 
-const vaccinations = [
+const vaccinations: Vaccination[] = [
   {
     vaccine: "COVID-19 (Pfizer)",
     date: "2023-10-15",
@@ -114,23 +143,127 @@ const insuranceInfo = {
   memberID: "MB987654321",
   effectiveDate: "2024-01-01",
   expirationDate: "2024-12-31",
-  copay: "$25",
-  deductible: "$1,500",
-  outOfPocketMax: "$6,000",
+  copay: "₹25",
+  deductible: "₹1,500",
+  outOfPocketMax: "₹6,000",
 }
 
 export function HealthRecords() {
+  const { toast } = useToast()
   const [isUploading, setIsUploading] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
+  const [documents, setDocuments] = useState<MedicalDocument[]>(medicalDocuments)
+  const [vaccineList, setVaccineList] = useState<Vaccination[]>(vaccinations)
+  const [isAddingVaccine, setIsAddingVaccine] = useState(false)
+  const [isUpdatingInsurance, setIsUpdatingInsurance] = useState(false)
+  const [isViewingDoc, setIsViewingDoc] = useState(false)
+  const [selectedDoc, setSelectedDoc] = useState<MedicalDocument | null>(null)
 
-  const filteredDocuments = medicalDocuments.filter((doc) => {
+  const filteredDocuments = documents.filter((doc) => {
     const matchesSearch =
       doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       doc.doctor.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === "all" || doc.category === selectedCategory
     return matchesSearch && matchesCategory
   })
+
+  // Handler functions
+  const handleUploadDocument = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const newDoc: MedicalDocument = {
+      id: documents.length + 1,
+      name: (formData.get('docName') as string) || 'Untitled Document',
+      type: (formData.get('docType') as string) || 'Medical Report',
+      date: new Date().toISOString().split('T')[0],
+      doctor: (formData.get('doctor') as string) || 'Unknown',
+      size: '1.0 MB',
+      category: (formData.get('docType') as string) || 'report',
+    }
+    setDocuments([...documents, newDoc])
+    setIsUploading(false)
+    toast({
+      title: "Document Uploaded",
+      description: "Your medical document has been uploaded successfully.",
+    })
+  }
+
+  const handleViewDocument = (doc: MedicalDocument) => {
+    setSelectedDoc(doc)
+    setIsViewingDoc(true)
+  }
+
+  const handleDownloadDocument = (doc: MedicalDocument) => {
+    // Simulate download
+    const link = document.createElement('a')
+    link.href = `data:text/plain;charset=utf-8,Document: ${doc.name}\nType: ${doc.type}\nDoctor: ${doc.doctor}\nDate: ${doc.date}`
+    link.download = `${doc.name}.txt`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    toast({
+      title: "Download Started",
+      description: `${doc.name} is being downloaded.`,
+    })
+  }
+
+  const handleDeleteDocument = (docId: number) => {
+    setDocuments(documents.filter(doc => doc.id !== docId))
+    toast({
+      title: "Document Deleted",
+      description: "The document has been removed from your records.",
+      variant: "destructive",
+    })
+  }
+
+  const handleAddVaccination = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const newVaccine: Vaccination = {
+      vaccine: (formData.get('vaccineName') as string) || '',
+      date: (formData.get('vaccineDate') as string) || '',
+      nextDue: (formData.get('nextDue') as string) || 'To be determined',
+      status: 'current',
+    }
+    setVaccineList([...vaccineList, newVaccine])
+    setIsAddingVaccine(false)
+    toast({
+      title: "Vaccination Added",
+      description: "Your vaccination record has been added successfully.",
+    })
+  }
+
+  const handleDownloadInsuranceCard = () => {
+    const cardInfo = `
+Insurance Card
+Provider: ${insuranceInfo.provider}
+Policy Number: ${insuranceInfo.policyNumber}
+Member ID: ${insuranceInfo.memberID}
+Group Number: ${insuranceInfo.groupNumber}
+Coverage: ${insuranceInfo.effectiveDate} - ${insuranceInfo.expirationDate}
+    `
+    const link = document.createElement('a')
+    link.href = `data:text/plain;charset=utf-8,${encodeURIComponent(cardInfo)}`
+    link.download = 'insurance-card.txt'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    toast({
+      title: "Insurance Card Downloaded",
+      description: "Your insurance card has been downloaded successfully.",
+    })
+  }
+
+  const handleUpdateInsurance = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    // In a real app, this would update the insurance info
+    setIsUpdatingInsurance(false)
+    toast({
+      title: "Insurance Updated",
+      description: "Your insurance information has been updated successfully.",
+    })
+  }
 
   return (
     <div className="space-y-6">
@@ -151,36 +284,38 @@ export function HealthRecords() {
               <DialogTitle>Upload Medical Document</DialogTitle>
               <DialogDescription>Add a new document to your health records</DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="docName">Document Name</Label>
-                <Input id="docName" placeholder="e.g., Blood Test Results" />
+            <form onSubmit={handleUploadDocument}>
+              <div className="grid gap-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="docName">Document Name</Label>
+                  <Input id="docName" name="docName" placeholder="e.g., Blood Test Results" required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="docType">Document Type</Label>
+                  <select name="docType" className="w-full p-2 border rounded-md" required>
+                    <option value="">Select type</option>
+                    <option value="lab">Lab Results</option>
+                    <option value="imaging">Imaging</option>
+                    <option value="prescription">Prescription</option>
+                    <option value="report">Medical Report</option>
+                    <option value="insurance">Insurance</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="doctor">Doctor/Provider</Label>
+                  <Input id="doctor" name="doctor" placeholder="e.g., Dr. Smith" required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="file">File Upload</Label>
+                  <Input id="file" name="file" type="file" accept=".pdf,.jpg,.png,.doc,.docx" required />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="docType">Document Type</Label>
-                <select className="w-full p-2 border rounded-md">
-                  <option value="">Select type</option>
-                  <option value="lab">Lab Results</option>
-                  <option value="imaging">Imaging</option>
-                  <option value="prescription">Prescription</option>
-                  <option value="report">Medical Report</option>
-                  <option value="insurance">Insurance</option>
-                </select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="doctor">Doctor/Provider</Label>
-                <Input id="doctor" placeholder="e.g., Dr. Smith" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="file">File Upload</Label>
-                <Input id="file" type="file" accept=".pdf,.jpg,.png,.doc,.docx" />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-                Upload Document
-              </Button>
-            </DialogFooter>
+              <DialogFooter>
+                <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+                  Upload Document
+                </Button>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
@@ -274,15 +409,36 @@ export function HealthRecords() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" onClick={() => handleViewDocument(doc)}>
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" onClick={() => handleDownloadDocument(doc)}>
                         <Download className="h-4 w-4" />
                       </Button>
-                      <Button variant="outline" size="sm">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="outline" size="sm">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Document</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete "{doc.name}"? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDeleteDocument(doc.id)}
+                              className="bg-red-600 hover:bg-red-700"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </div>
                 ))}
@@ -364,7 +520,7 @@ export function HealthRecords() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {vaccinations.map((vaccine, index) => (
+                {vaccineList.map((vaccine, index) => (
                   <div
                     key={index}
                     className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 border rounded-lg gap-3 sm:gap-0"
@@ -385,10 +541,41 @@ export function HealthRecords() {
                 ))}
               </div>
               <div className="mt-6">
-                <Button variant="outline" className="w-full bg-transparent">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Vaccination Record
-                </Button>
+                <Dialog open={isAddingVaccine} onOpenChange={setIsAddingVaccine}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="w-full bg-transparent">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add Vaccination Record
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Add Vaccination Record</DialogTitle>
+                      <DialogDescription>Add a new vaccination to your records</DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleAddVaccination}>
+                      <div className="grid gap-4 py-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="vaccineName">Vaccine Name</Label>
+                          <Input id="vaccineName" name="vaccineName" placeholder="e.g., COVID-19 (Pfizer)" required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="vaccineDate">Date Administered</Label>
+                          <Input id="vaccineDate" name="vaccineDate" type="date" required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="nextDue">Next Due (Optional)</Label>
+                          <Input id="nextDue" name="nextDue" type="date" />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+                          Add Vaccination
+                        </Button>
+                      </DialogFooter>
+                    </form>
+                  </DialogContent>
+                </Dialog>
               </div>
             </CardContent>
           </Card>
@@ -446,20 +633,107 @@ export function HealthRecords() {
               </div>
               <div className="mt-6 pt-6 border-t">
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Button variant="outline" className="bg-transparent text-xs sm:text-sm">
+                  <Button variant="outline" className="bg-transparent text-xs sm:text-sm" onClick={handleDownloadInsuranceCard}>
                     <Download className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                     Download Insurance Card
                   </Button>
-                  <Button variant="outline" className="text-xs sm:text-sm">
-                    <Edit className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-                    Update Information
-                  </Button>
+                  <Dialog open={isUpdatingInsurance} onOpenChange={setIsUpdatingInsurance}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" className="text-xs sm:text-sm">
+                        <Edit className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                        Update Information
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Update Insurance Information</DialogTitle>
+                        <DialogDescription>Update your health insurance details</DialogDescription>
+                      </DialogHeader>
+                      <form onSubmit={handleUpdateInsurance}>
+                        <div className="grid gap-4 py-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="provider">Insurance Provider</Label>
+                            <Input id="provider" name="provider" defaultValue={insuranceInfo.provider} />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="policyNumber">Policy Number</Label>
+                            <Input id="policyNumber" name="policyNumber" defaultValue={insuranceInfo.policyNumber} />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="memberID">Member ID</Label>
+                            <Input id="memberID" name="memberID" defaultValue={insuranceInfo.memberID} />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="groupNumber">Group Number</Label>
+                            <Input id="groupNumber" name="groupNumber" defaultValue={insuranceInfo.groupNumber} />
+                          </div>
+                        </div>
+                        <DialogFooter>
+                          <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+                            Update Information
+                          </Button>
+                        </DialogFooter>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Document View Dialog */}
+      <Dialog open={isViewingDoc} onOpenChange={setIsViewingDoc}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Document Viewer</DialogTitle>
+            <DialogDescription>
+              {selectedDoc ? `Viewing: ${selectedDoc.name}` : 'No document selected'}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedDoc && (
+            <div className="py-4">
+              <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-sm font-medium text-gray-600">Document Name</Label>
+                    <p className="font-medium">{selectedDoc.name}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-gray-600">Type</Label>
+                    <p className="font-medium">{selectedDoc.type}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-gray-600">Date</Label>
+                    <p className="font-medium">{selectedDoc.date}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-gray-600">Doctor</Label>
+                    <p className="font-medium">{selectedDoc.doctor}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-gray-600">File Size</Label>
+                    <p className="font-medium">{selectedDoc.size}</p>
+                  </div>
+                </div>
+                <div className="mt-4 p-4 bg-white border rounded-lg">
+                  <p className="text-sm text-gray-600 italic">
+                    Document preview would be displayed here. In a real application, this would show the actual file content.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => selectedDoc && handleDownloadDocument(selectedDoc)}>
+              <Download className="mr-2 h-4 w-4" />
+              Download
+            </Button>
+            <Button onClick={() => setIsViewingDoc(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

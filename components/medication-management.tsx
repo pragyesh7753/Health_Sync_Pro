@@ -21,7 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-const medications = [
+const initialMedications = [
   {
     id: 1,
     name: "Lisinopril",
@@ -71,8 +71,152 @@ const todaySchedule = [
 ]
 
 export function MedicationManagement() {
+  const [medications, setMedications] = useState(initialMedications)
+  const [todayScheduleState, setTodayScheduleState] = useState(todaySchedule)
   const [isAddingMedication, setIsAddingMedication] = useState(false)
   const [selectedMedication, setSelectedMedication] = useState<any>(null)
+  const [isEditingMedication, setIsEditingMedication] = useState(false)
+  const [refillReminders, setRefillReminders] = useState<{ [key: string]: boolean }>({})
+  
+  // Form state for adding new medication
+  const [newMedication, setNewMedication] = useState({
+    name: "",
+    dosage: "",
+    frequency: "",
+    time: "",
+    notes: "",
+    total: 30, // default
+    remaining: 30, // default
+  })
+
+  // Mark medication as taken in today's schedule
+  const markAsTaken = (index: number) => {
+    const updatedSchedule = [...todayScheduleState]
+    updatedSchedule[index].taken = true
+    setTodayScheduleState(updatedSchedule)
+  }
+
+  // Toggle reminder for a medication
+  const toggleReminder = (id: number) => {
+    setMedications(medications.map(med => 
+      med.id === id ? { ...med, reminders: !med.reminders } : med
+    ))
+  }
+
+  // Delete medication
+  const deleteMedication = (id: number) => {
+    if (confirm("Are you sure you want to delete this medication?")) {
+      setMedications(medications.filter(med => med.id !== id))
+    }
+  }
+
+  // Edit medication (placeholder for now)
+  const editMedication = (medication: any) => {
+    setSelectedMedication(medication)
+    setNewMedication({
+      name: medication.name,
+      dosage: medication.dosage,
+      frequency: medication.frequency,
+      time: medication.time.includes('AM') || medication.time.includes('PM') 
+        ? convertTo24Hour(medication.time) 
+        : medication.time,
+      notes: "",
+      total: medication.total,
+      remaining: medication.remaining,
+    })
+    setIsEditingMedication(true)
+  }
+
+  // Convert 12-hour time to 24-hour for editing
+  const convertTo24Hour = (time12h: string) => {
+    const [time, modifier] = time12h.split(' ')
+    let [hours, minutes] = time.split(':')
+    if (hours === '12') {
+      hours = modifier === 'AM' ? '00' : '12'
+    } else if (modifier === 'PM') {
+      hours = (parseInt(hours, 10) + 12).toString()
+    }
+    return `${hours.padStart(2, '0')}:${minutes}`
+  }
+
+  // Set reminder (placeholder functionality)
+  const setRefillReminder = (medicationName: string) => {
+    setRefillReminders(prev => ({
+      ...prev,
+      [medicationName]: true
+    }))
+  }
+
+  const handleAddMedication = () => {
+    console.log("handleAddMedication called", { newMedication, isEditingMedication })
+    
+    if (!newMedication.name || !newMedication.dosage || !newMedication.frequency || !newMedication.time) {
+      alert("Please fill in all required fields")
+      return
+    }
+
+    const today = new Date()
+    const refillDate = new Date(today.setMonth(today.getMonth() + 1)).toISOString().split('T')[0]
+
+    // Convert 24-hour time to 12-hour format with AM/PM
+    const formatTime = (time: string) => {
+      const [hours, minutes] = time.split(':')
+      const hour = parseInt(hours)
+      const ampm = hour >= 12 ? 'PM' : 'AM'
+      const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour
+      return `${displayHour}:${minutes} ${ampm}`
+    }
+
+    if (isEditingMedication && selectedMedication) {
+      // Update existing medication
+      setMedications(medications.map(med => 
+        med.id === selectedMedication.id 
+          ? {
+              ...med,
+              name: newMedication.name,
+              dosage: newMedication.dosage,
+              frequency: newMedication.frequency,
+              time: formatTime(newMedication.time),
+              total: newMedication.total,
+              remaining: newMedication.remaining,
+            }
+          : med
+      ))
+      setIsEditingMedication(false)
+      setSelectedMedication(null)
+    } else {
+      // Add new medication
+      const medication = {
+        id: Math.max(...medications.map(m => m.id), 0) + 1,
+        name: newMedication.name,
+        dosage: newMedication.dosage,
+        frequency: newMedication.frequency,
+        time: formatTime(newMedication.time),
+        remaining: newMedication.remaining,
+        total: newMedication.total,
+        refillDate: refillDate,
+        sideEffects: [],
+        reminders: true,
+        taken: false,
+      }
+      setMedications([...medications, medication])
+    }
+    
+    // Reset form
+    setNewMedication({
+      name: "",
+      dosage: "",
+      frequency: "",
+      time: "",
+      notes: "",
+      total: 30,
+      remaining: 30,
+    })
+    
+    setIsAddingMedication(false)
+    setIsEditingMedication(false)
+    setSelectedMedication(null)
+  }
 
   return (
     <div className="space-y-6">
@@ -83,55 +227,126 @@ export function MedicationManagement() {
             Track your medications, set reminders, and monitor side effects
           </p>
         </div>
-        <Dialog open={isAddingMedication} onOpenChange={setIsAddingMedication}>
+        <Dialog open={isAddingMedication || isEditingMedication} onOpenChange={(open) => {
+          if (!open) {
+            setIsAddingMedication(false)
+            setIsEditingMedication(false)
+            setSelectedMedication(null)
+            setNewMedication({
+              name: "",
+              dosage: "",
+              frequency: "",
+              time: "",
+              notes: "",
+              total: 30,
+              remaining: 30,
+            })
+          }
+        }}>
           <DialogTrigger asChild>
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button 
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={() => setIsAddingMedication(true)}
+            >
               <Plus className="mr-2 h-4 w-4" />
               Add Medication
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Add New Medication</DialogTitle>
-              <DialogDescription>Enter the details of your new medication</DialogDescription>
+              <DialogTitle>{isEditingMedication ? 'Edit Medication' : 'Add New Medication'}</DialogTitle>
+              <DialogDescription>
+                {isEditingMedication ? 'Update the details of your medication' : 'Enter the details of your new medication'}
+              </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="medName">Medication Name</Label>
-                <Input id="medName" placeholder="e.g., Aspirin" />
+                <Label htmlFor="medName">Medication Name *</Label>
+                <Input 
+                  id="medName" 
+                  placeholder="e.g., Aspirin" 
+                  value={newMedication.name}
+                  onChange={(e) => setNewMedication({...newMedication, name: e.target.value})}
+                />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="dosage">Dosage</Label>
-                  <Input id="dosage" placeholder="e.g., 100mg" />
+                  <Label htmlFor="dosage">Dosage *</Label>
+                  <Input 
+                    id="dosage" 
+                    placeholder="e.g., 100mg" 
+                    value={newMedication.dosage}
+                    onChange={(e) => setNewMedication({...newMedication, dosage: e.target.value})}
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="frequency">Frequency</Label>
-                  <Select>
+                  <Label htmlFor="frequency">Frequency *</Label>
+                  <Select value={newMedication.frequency} onValueChange={(value) => setNewMedication({...newMedication, frequency: value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select frequency" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="once">Once daily</SelectItem>
-                      <SelectItem value="twice">Twice daily</SelectItem>
-                      <SelectItem value="three">Three times daily</SelectItem>
-                      <SelectItem value="four">Four times daily</SelectItem>
+                      <SelectItem value="Once daily">Once daily</SelectItem>
+                      <SelectItem value="Twice daily">Twice daily</SelectItem>
+                      <SelectItem value="Three times daily">Three times daily</SelectItem>
+                      <SelectItem value="Four times daily">Four times daily</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="time">Time(s)</Label>
-                <Input id="time" placeholder="e.g., 8:00 AM" />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="time">Time(s) *</Label>
+                  <Input 
+                    id="time" 
+                    type="time"
+                    value={newMedication.time}
+                    onChange={(e) => setNewMedication({...newMedication, time: e.target.value})}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="total">Total Pills</Label>
+                  <Input 
+                    id="total" 
+                    type="number"
+                    placeholder="30" 
+                    value={newMedication.total}
+                    onChange={(e) => {
+                      const total = parseInt(e.target.value) || 30
+                      setNewMedication({...newMedication, total, remaining: total})
+                    }}
+                  />
+                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="notes">Notes</Label>
-                <Textarea id="notes" placeholder="Any special instructions..." />
+                <Textarea 
+                  id="notes" 
+                  placeholder="Any special instructions..." 
+                  value={newMedication.notes}
+                  onChange={(e) => setNewMedication({...newMedication, notes: e.target.value})}
+                />
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-                Add Medication
+              <Button variant="outline" onClick={() => {
+                setIsAddingMedication(false)
+                setIsEditingMedication(false)
+                setSelectedMedication(null)
+                setNewMedication({
+                  name: "",
+                  dosage: "",
+                  frequency: "",
+                  time: "",
+                  notes: "",
+                  total: 30,
+                  remaining: 30,
+                })
+              }}>
+                Cancel
+              </Button>
+              <Button type="submit" className="bg-blue-600 hover:bg-blue-700" onClick={handleAddMedication}>
+                {isEditingMedication ? 'Update Medication' : 'Add Medication'}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -149,7 +364,7 @@ export function MedicationManagement() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {todaySchedule.map((item, index) => (
+            {todayScheduleState.map((item, index) => (
               <div
                 key={index}
                 className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 rounded-lg border gap-3 sm:gap-4"
@@ -168,7 +383,7 @@ export function MedicationManagement() {
                       Taken
                     </Badge>
                   ) : (
-                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => markAsTaken(index)}>
                       Mark as Taken
                     </Button>
                   )}
@@ -225,7 +440,7 @@ export function MedicationManagement() {
                       <div>
                         <p className="text-sm text-gray-600">Reminders</p>
                         <div className="flex items-center gap-2">
-                          <Switch checked={med.reminders} />
+                          <Switch checked={med.reminders} onCheckedChange={() => toggleReminder(med.id)} />
                           <Bell className="h-4 w-4 text-gray-400" />
                         </div>
                       </div>
@@ -253,41 +468,16 @@ export function MedicationManagement() {
                   </div>
 
                   <div className="flex gap-2 flex-shrink-0">
-                    <Button variant="outline" size="sm" className="p-2">
+                    <Button variant="outline" size="sm" className="p-2" onClick={() => editMedication(med)}>
                       <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
-                    <Button variant="outline" size="sm" className="p-2">
+                    <Button variant="outline" size="sm" className="p-2" onClick={() => deleteMedication(med.id)}>
                       <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
                   </div>
                 </div>
               </div>
             ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Drug Interaction Checker */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5" />
-            Drug Interaction Checker
-          </CardTitle>
-          <CardDescription>Check for potential interactions between your medications</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <Button className="bg-blue-600 hover:bg-blue-700">Run Interaction Check</Button>
-            <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5 text-green-600" />
-                <p className="text-green-800 font-medium">No interactions found</p>
-              </div>
-              <p className="text-sm text-green-700 mt-1">
-                Your current medications appear to be safe to take together.
-              </p>
-            </div>
           </div>
         </CardContent>
       </Card>
@@ -308,18 +498,32 @@ export function MedicationManagement() {
                 <p className="font-medium text-yellow-800">Vitamin D</p>
                 <p className="text-sm text-yellow-700">Refill needed in 3 days</p>
               </div>
-              <Button size="sm" variant="outline">
-                Set Reminder
-              </Button>
+              {refillReminders["Vitamin D"] ? (
+                <Badge variant="secondary" className="bg-green-100 text-green-800">
+                  <CheckCircle className="mr-1 h-3 w-3" />
+                  Reminder Set
+                </Badge>
+              ) : (
+                <Button size="sm" variant="outline" onClick={() => setRefillReminder("Vitamin D")}>
+                  Set Reminder
+                </Button>
+              )}
             </div>
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
               <div>
                 <p className="font-medium">Lisinopril</p>
                 <p className="text-sm text-gray-600">Refill needed in 8 days</p>
               </div>
-              <Button size="sm" variant="outline">
-                Set Reminder
-              </Button>
+              {refillReminders["Lisinopril"] ? (
+                <Badge variant="secondary" className="bg-green-100 text-green-800">
+                  <CheckCircle className="mr-1 h-3 w-3" />
+                  Reminder Set
+                </Badge>
+              ) : (
+                <Button size="sm" variant="outline" onClick={() => setRefillReminder("Lisinopril")}>
+                  Set Reminder
+                </Button>
+              )}
             </div>
           </div>
         </CardContent>

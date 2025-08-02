@@ -44,35 +44,48 @@ Health Sync Pro is a comprehensive, user-friendly health dashboard designed to h
 ## 🗂️ Project Structure
 
 ```
-├── app/                  # Next.js app directory (entry, layout, global styles)
-├── components/           # All React components
-│   ├── ui/               # Reusable UI primitives (Accordion, Button, Card, etc.)
-│   ├── app-sidebar.tsx   # Sidebar navigation
-│   ├── dashboard.tsx     # Main dashboard view
-│   ├── health-app.tsx    # App shell and tab logic
-│   ├── health-metrics.tsx# Health metrics charts
-│   ├── health-profile.tsx# User profile management
-│   ├── health-records.tsx# Health records view
-│   ├── login-register.tsx# Auth forms
+├── .eslintrc.json        # ESLint configuration
+├── .gitignore           # Git ignore rules
+├── app/                 # Next.js app directory (entry, layout, global styles)
+│   ├── error.tsx        # Error boundary component
+│   ├── globals.css      # Global CSS styles (Tailwind)
+│   ├── layout.tsx       # Root layout component
+│   └── page.tsx         # Main page component
+├── components/          # All React components
+│   ├── ui/              # Reusable UI primitives (Accordion, Button, Card, etc.)
+│   ├── app-sidebar.tsx  # Sidebar navigation
+│   ├── appointment-management.tsx # Appointment scheduling and management
+│   ├── auth-context.tsx # Authentication context and logic
+│   ├── dashboard.tsx    # Main dashboard view
+│   ├── enhanced-progress.tsx # Enhanced progress indicators
+│   ├── health-app.tsx   # App shell and tab logic
+│   ├── health-metrics.tsx # Health metrics charts
+│   ├── health-profile.tsx # User profile management
+│   ├── health-records.tsx # Health records view
+│   ├── loading.tsx      # Loading component
+│   ├── login-register.tsx # Auth forms
 │   ├── medication-management.tsx # Medication tracking
-│   ├── mobile-bottom-nav.tsx     # Mobile navigation
-│   ├── notification-system.tsx   # Notification logic
-│   ├── quick-entry-modal.tsx     # Quick data entry modal
-│   ├── theme-provider.tsx        # Theme context
-│   └── ...
+│   ├── medication-reminder-modal.tsx # Medication reminder modals
+│   ├── notification-system.tsx # Notification logic
+│   ├── quick-entry-modal.tsx # Quick data entry modal
+│   └── theme-provider.tsx # Theme context
 ├── hooks/               # Custom React hooks
 │   ├── use-mobile.tsx   # Mobile detection
-│   ├── use-responsive.ts# Responsive breakpoints
+│   ├── use-responsive.ts # Responsive breakpoints
 │   └── use-toast.ts     # Toast notifications
-├── lib/                 # Utility functions
-│   └── utils.ts         # Class name helpers
+├── lib/                 # Utility functions and services
+│   ├── services/        # Service layer (currently empty)
+│   └── utils.ts         # Class name helpers and utilities
 ├── public/              # Static assets (images, favicon, etc.)
-├── styles/              # Global CSS (Tailwind)
+│   └── favicon.png      # Application favicon
+├── components.json      # Shadcn/ui component configuration
+├── next-env.d.ts        # Next.js TypeScript definitions
+├── next.config.mjs      # Next.js configuration
 ├── package.json         # Project metadata and scripts
-├── tailwind.config.ts   # Tailwind CSS config
-├── postcss.config.mjs   # PostCSS config
-├── tsconfig.json        # TypeScript config
-└── ...
+├── pnpm-lock.yaml       # Package manager lock file
+├── postcss.config.mjs   # PostCSS configuration
+├── tailwind.config.ts   # Tailwind CSS configuration
+└── tsconfig.json        # TypeScript configuration
 ```
 
 ---
@@ -111,22 +124,25 @@ npm run build
 
 ## 🧩 Main Modules & Components
 
-| Module                        | Description                                      |
-|-------------------------------|--------------------------------------------------|
-| `auth-context.tsx`            | Authentication context and logic                  |
-| `login-register.tsx`          | Login and registration forms                     |
-| `dashboard.tsx`               | Main dashboard with health summaries             |
-| `health-app.tsx`              | App shell, tab navigation                        |
-| `health-metrics.tsx`          | Charts and metrics visualization                 |
-| `health-profile.tsx`          | User profile, allergies, conditions              |
-| `medication-management.tsx`   | Medication tracking and reminders                |
-| `appointment-management.tsx`  | Appointment scheduling and management            |
-| `health-records.tsx`          | Health records storage and access                |
-| `notification-system.tsx`     | In-app notifications and reminders               |
-| `quick-entry-modal.tsx`       | Fast entry for daily health data                 |
-| `mobile-bottom-nav.tsx`       | Mobile navigation bar                            |
-| `theme-provider.tsx`          | Light/dark mode theming                          |
-| `ui/`                         | Reusable UI primitives (buttons, cards, etc.)    |
+| Module                          | Description                                      |
+|---------------------------------|--------------------------------------------------|
+| `auth-context.tsx`              | Authentication context and logic                |
+| `login-register.tsx`            | Login and registration forms                     |
+| `dashboard.tsx`                 | Main dashboard with health summaries             |
+| `health-app.tsx`                | App shell, tab navigation                        |
+| `health-metrics.tsx`            | Charts and metrics visualization                 |
+| `health-profile.tsx`            | User profile, allergies, conditions              |
+| `medication-management.tsx`     | Medication tracking and reminders                |
+| `medication-reminder-modal.tsx` | Medication reminder modal dialogs                |
+| `appointment-management.tsx`    | Appointment scheduling and management            |
+| `health-records.tsx`            | Health records storage and access                |
+| `notification-system.tsx`       | In-app notifications and reminders               |
+| `quick-entry-modal.tsx`         | Fast entry for daily health data                 |
+| `app-sidebar.tsx`               | Sidebar navigation component                      |
+| `enhanced-progress.tsx`         | Enhanced progress indicators and bars            |
+| `loading.tsx`                   | Loading states and components                     |
+| `theme-provider.tsx`            | Light/dark mode theming                          |
+| `ui/`                           | Reusable UI primitives (buttons, cards, etc.)    |
 
 ---
 

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useToast } from "@/hooks/use-toast"
 import { Activity, Heart, Weight, Moon, Zap, Plus, TrendingUp, TrendingDown, Calculator } from "lucide-react"
 import {
   LineChart,
@@ -72,11 +73,97 @@ const exerciseData = [
 ]
 
 export function HealthMetrics() {
+  const { toast } = useToast()
   const [isAddingMetric, setIsAddingMetric] = useState(false)
   const [selectedMetric, setSelectedMetric] = useState("")
   const [bmiHeight, setBmiHeight] = useState("")
   const [bmiWeight, setBmiWeight] = useState("")
   const [calculatedBMI, setCalculatedBMI] = useState<number | null>(null)
+  
+  // Form state for health readings
+  const [healthReading, setHealthReading] = useState({
+    systolic: "",
+    diastolic: "",
+    weight: "",
+    bloodSugar: "",
+    temperature: "",
+    heartRate: ""
+  })
+
+  const handleSaveReading = () => {
+    if (!selectedMetric) {
+      toast({
+        title: "Error",
+        description: "Please select a metric type",
+        variant: "destructive",
+      })
+      return
+    }
+
+    // Validate based on selected metric
+    let isValid = false
+    let readingValue = ""
+
+    switch (selectedMetric) {
+      case "blood-pressure":
+        if (healthReading.systolic && healthReading.diastolic) {
+          isValid = true
+          readingValue = `${healthReading.systolic}/${healthReading.diastolic} mmHg`
+        }
+        break
+      case "weight":
+        if (healthReading.weight) {
+          isValid = true
+          readingValue = `${healthReading.weight} kg`
+        }
+        break
+      case "blood-sugar":
+        if (healthReading.bloodSugar) {
+          isValid = true
+          readingValue = `${healthReading.bloodSugar} mg/dL`
+        }
+        break
+      case "temperature":
+        if (healthReading.temperature) {
+          isValid = true
+          readingValue = `${healthReading.temperature}°C`
+        }
+        break
+      case "heart-rate":
+        if (healthReading.heartRate) {
+          isValid = true
+          readingValue = `${healthReading.heartRate} BPM`
+        }
+        break
+    }
+
+    if (!isValid) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      })
+      return
+    }
+
+    // Here you would typically save to a database
+    toast({
+      title: "Success",
+      description: `Health reading saved: ${readingValue}`,
+    })
+    
+    // Reset form
+    setHealthReading({
+      systolic: "",
+      diastolic: "",
+      weight: "",
+      bloodSugar: "",
+      temperature: "",
+      heartRate: ""
+    })
+    setSelectedMetric("")
+    setIsAddingMetric(false)
+  }
 
   const calculateBMI = () => {
     const height = parseFloat(bmiHeight)
@@ -84,7 +171,11 @@ export function HealthMetrics() {
     
     // Validate inputs
     if (!height || !weight || height <= 0 || weight <= 0) {
-      alert('Please enter valid height and weight values')
+      toast({
+        title: "Error",
+        description: "Please enter valid height and weight values",
+        variant: "destructive",
+      })
       return
     }
     
@@ -92,6 +183,11 @@ export function HealthMetrics() {
     const heightInMeters = height / 100
     const bmi = weight / (heightInMeters * heightInMeters)
     setCalculatedBMI(Math.round(bmi * 10) / 10)
+    
+    toast({
+      title: "BMI Calculated",
+      description: `Your BMI is ${Math.round(bmi * 10) / 10}`,
+    })
   }
 
   const getBMICategory = (bmi: number) => {
@@ -140,29 +236,71 @@ export function HealthMetrics() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Systolic</Label>
-                    <Input placeholder="120" />
+                    <Input 
+                      placeholder="120" 
+                      value={healthReading.systolic}
+                      onChange={(e) => setHealthReading({...healthReading, systolic: e.target.value})}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label>Diastolic</Label>
-                    <Input placeholder="80" />
+                    <Input 
+                      placeholder="80" 
+                      value={healthReading.diastolic}
+                      onChange={(e) => setHealthReading({...healthReading, diastolic: e.target.value})}
+                    />
                   </div>
                 </div>
               )}
               {selectedMetric === "weight" && (
                 <div className="space-y-2">
                   <Label>Weight (kg)</Label>
-                  <Input placeholder="70.5" />
+                  <Input 
+                    placeholder="70.5" 
+                    value={healthReading.weight}
+                    onChange={(e) => setHealthReading({...healthReading, weight: e.target.value})}
+                  />
                 </div>
               )}
               {selectedMetric === "blood-sugar" && (
                 <div className="space-y-2">
                   <Label>Blood Sugar (mg/dL)</Label>
-                  <Input placeholder="95" />
+                  <Input 
+                    placeholder="95" 
+                    value={healthReading.bloodSugar}
+                    onChange={(e) => setHealthReading({...healthReading, bloodSugar: e.target.value})}
+                  />
+                </div>
+              )}
+              {selectedMetric === "temperature" && (
+                <div className="space-y-2">
+                  <Label>Body Temperature (°C)</Label>
+                  <Input 
+                    placeholder="36.5" 
+                    type="number"
+                    step="0.1"
+                    value={healthReading.temperature}
+                    onChange={(e) => setHealthReading({...healthReading, temperature: e.target.value})}
+                  />
+                </div>
+              )}
+              {selectedMetric === "heart-rate" && (
+                <div className="space-y-2">
+                  <Label>Heart Rate (BPM)</Label>
+                  <Input 
+                    placeholder="72" 
+                    type="number"
+                    value={healthReading.heartRate}
+                    onChange={(e) => setHealthReading({...healthReading, heartRate: e.target.value})}
+                  />
                 </div>
               )}
             </div>
             <DialogFooter>
-              <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+              <Button variant="outline" onClick={() => setIsAddingMetric(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" className="bg-blue-600 hover:bg-blue-700" onClick={handleSaveReading}>
                 Save Reading
               </Button>
             </DialogFooter>
