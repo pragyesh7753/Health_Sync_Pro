@@ -15,16 +15,20 @@ import { useIsMobile } from "@/hooks/use-mobile"
 
 export function HealthApp() {
   const [activeTab, setActiveTab] = useState("dashboard")
+  const [welcomeShown, setWelcomeShown] = useState(false)
   const { notifications, removeNotification, showSuccess } = useNotifications()
   const isMobile = useIsMobile()
   
-  // Show welcome notification on mount
+  // Show welcome notification on mount (only once)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      showSuccess("Welcome back!", "Your health dashboard is ready.", 4000)
-    }, 1000)
-    return () => clearTimeout(timer)
-  }, [])
+    if (!welcomeShown) {
+      const timer = setTimeout(() => {
+        showSuccess("Welcome back!", "Your health dashboard is ready.", 4000)
+        setWelcomeShown(true)
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [showSuccess, welcomeShown])
 
   // Scroll to top when activeTab changes
   useEffect(() => {

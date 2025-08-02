@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface QuickEntryModalProps {
   open: boolean;
@@ -32,22 +34,22 @@ export function QuickEntryModal({ open, onOpenChange }: QuickEntryModalProps) {
           <DialogTitle>Quick Health Entry</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Steps</label>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="steps" className="text-sm font-medium">Steps</Label>
+            <Input
+              id="steps"
               type="number"
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring"
               value={steps}
               onChange={e => setSteps(e.target.value)}
               placeholder="Enter steps"
               min={0}
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Weight (kg)</label>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="weight" className="text-sm font-medium">Weight (kg)</Label>
+            <Input
+              id="weight"
               type="number"
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring"
               value={weight}
               onChange={e => setWeight(e.target.value)}
               placeholder="Enter weight"
@@ -55,11 +57,11 @@ export function QuickEntryModal({ open, onOpenChange }: QuickEntryModalProps) {
               step="0.1"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Heart Rate (BPM)</label>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="heartRate" className="text-sm font-medium">Heart Rate (BPM)</Label>
+            <Input
+              id="heartRate"
               type="number"
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring"
               value={heartRate}
               onChange={e => setHeartRate(e.target.value)}
               placeholder="Enter heart rate"

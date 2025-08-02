@@ -143,7 +143,7 @@ export function MedicationManagement() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
-            Today's Schedule
+            Today&apos;s Schedule
           </CardTitle>
           <CardDescription>Your medication schedule for today</CardDescription>
         </CardHeader>

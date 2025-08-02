@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -82,7 +82,7 @@ export function Dashboard() {
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Health Dashboard
             </h1>
-            <p className="text-gray-600 text-sm sm:text-base mt-1">Welcome back! Here's your health overview for today.</p>
+            <p className="text-gray-600 text-sm sm:text-base mt-1">Welcome back! Here&apos;s your health overview for today.</p>
           </div>
         <Button
           className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
@@ -269,7 +269,7 @@ export function Dashboard() {
                   <Pill className="h-5 w-5 text-purple-600" />
                   <div className="absolute inset-0 h-5 w-5 bg-purple-400 rounded-full animate-ping opacity-20"></div>
                 </div>
-                Today's Medications
+                Today&apos;s Medications
               </CardTitle>
               <Button variant="outline" size="sm" className="hover:bg-purple-50 hover:border-purple-300 transition-all duration-200" onClick={handleSetReminders}>
                 <Bell className="mr-2 h-4 w-4" />

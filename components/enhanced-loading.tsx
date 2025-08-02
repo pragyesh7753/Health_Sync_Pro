@@ -9,7 +9,7 @@ interface EnhancedLoadingProps {
 
 export function EnhancedLoading({ 
   message = "Loading HealthSync Pro", 
-  submessage = "Preparing your health dashboard..." 
+  submessage = "Preparing your personalized health dashboard..." 
 }: EnhancedLoadingProps) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden">

@@ -24,17 +24,31 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true) // Set back to true to show loading screen
 
   useEffect(() => {
     // Check if user is logged in on app start
-    const savedUser = localStorage.getItem("healthapp_user")
-    const savedToken = localStorage.getItem("healthapp_token")
+    // Ensure we're on the client side before accessing localStorage
+    if (typeof window !== 'undefined') {
+      const savedUser = localStorage.getItem("healthapp_user")
+      const savedToken = localStorage.getItem("healthapp_token")
 
-    if (savedUser && savedToken) {
-      setUser(JSON.parse(savedUser))
+      if (savedUser && savedToken) {
+        try {
+          setUser(JSON.parse(savedUser))
+        } catch (error) {
+          console.error("Error parsing saved user:", error)
+          // Clear corrupted data
+          localStorage.removeItem("healthapp_user")
+          localStorage.removeItem("healthapp_token")
+        }
+      }
     }
-    setIsLoading(false)
+    
+    // Add a delay to show the loading screen
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 4000) // Show loading for 4 seconds so you can see it
   }, [])
 
   const login = async (email: string, password: string): Promise<boolean> => {
@@ -47,8 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const foundUser = users.find((u: any) => u.email === email && u.password === password)
 
       if (foundUser) {
-        const userWithoutPassword = { ...foundUser }
-        delete userWithoutPassword.password
+        const { password, ...userWithoutPassword } = foundUser
 
         setUser(userWithoutPassword)
         localStorage.setItem("healthapp_user", JSON.stringify(userWithoutPassword))
@@ -90,8 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.setItem("healthapp_users", JSON.stringify(users))
 
       // Auto login after registration
-      const userWithoutPassword = { ...newUser }
-      delete userWithoutPassword.password
+      const { password: _, ...userWithoutPassword } = newUser
 
       setUser(userWithoutPassword)
       localStorage.setItem("healthapp_user", JSON.stringify(userWithoutPassword))

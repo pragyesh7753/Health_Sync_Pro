@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { CheckCircle, AlertCircle, Info, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -18,16 +18,36 @@ interface NotificationSystemProps {
 }
 
 export function NotificationSystem({ notifications, onRemove }: NotificationSystemProps) {
+  const timerIdsRef = useRef<Set<string>>(new Set())
+
   useEffect(() => {
+    const newTimers: Record<string, NodeJS.Timeout> = {}
+    
     notifications.forEach((notification) => {
-      if (notification.duration !== 0) {
+      // Only set timer for notifications that don't already have one
+      // Skip timer only if duration is explicitly set to 0 (persistent notification)
+      if (notification.duration !== 0 && !timerIdsRef.current.has(notification.id)) {
         const timer = setTimeout(() => {
           onRemove(notification.id)
+          timerIdsRef.current.delete(notification.id)
         }, notification.duration || 5000)
         
-        return () => clearTimeout(timer)
+        newTimers[notification.id] = timer
+        timerIdsRef.current.add(notification.id)
       }
     })
+
+    // Clean up removed notifications from timerIds
+    const currentIds = new Set(notifications.map(n => n.id))
+    Array.from(timerIdsRef.current).forEach(id => {
+      if (!currentIds.has(id)) {
+        timerIdsRef.current.delete(id)
+      }
+    })
+    
+    return () => {
+      Object.values(newTimers).forEach(timer => clearTimeout(timer))
+    }
   }, [notifications, onRemove])
 
   const getIcon = (type: string) => {
@@ -93,22 +113,15 @@ export function NotificationSystem({ notifications, onRemove }: NotificationSyst
           {notification.duration && notification.duration > 0 && (
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200/50 overflow-hidden">
               <div 
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse"
+                className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
                 style={{
-                  animation: `shrink ${notification.duration}ms linear forwards`
+                  animation: `notification-shrink ${notification.duration}ms linear forwards`
                 }}
               ></div>
             </div>
           )}
         </div>
       ))}
-      
-      <style jsx>{`
-        @keyframes shrink {
-          from { width: 100%; }
-          to { width: 0%; }
-        }
-      `}</style>
     </div>
   )
 }
@@ -117,26 +130,26 @@ export function NotificationSystem({ notifications, onRemove }: NotificationSyst
 export function useNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>([])
 
-  const addNotification = (notification: Omit<Notification, 'id'>) => {
+  const addNotification = useCallback((notification: Omit<Notification, 'id'>) => {
     const id = Math.random().toString(36).substr(2, 9)
     setNotifications(prev => [...prev, { ...notification, id }])
-  }
+  }, [])
 
-  const removeNotification = (id: string) => {
+  const removeNotification = useCallback((id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id))
-  }
+  }, [])
 
-  const showSuccess = (title: string, message: string, duration?: number) => {
+  const showSuccess = useCallback((title: string, message: string, duration?: number) => {
     addNotification({ type: 'success', title, message, duration })
-  }
+  }, [addNotification])
 
-  const showError = (title: string, message: string, duration?: number) => {
+  const showError = useCallback((title: string, message: string, duration?: number) => {
     addNotification({ type: 'error', title, message, duration })
-  }
+  }, [addNotification])
 
-  const showInfo = (title: string, message: string, duration?: number) => {
+  const showInfo = useCallback((title: string, message: string, duration?: number) => {
     addNotification({ type: 'info', title, message, duration })
-  }
+  }, [addNotification])
 
   return {
     notifications,

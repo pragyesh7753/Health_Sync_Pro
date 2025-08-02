@@ -152,6 +152,15 @@
   }
 }
 
+@keyframes notification-shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
