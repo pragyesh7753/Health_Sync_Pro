@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { EnhancedProgress } from "@/components/enhanced-progress"
 import { QuickEntryModal } from "@/components/quick-entry-modal"
+import { MedicationReminderModal } from "@/components/medication-reminder-modal"
 import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Bell } from "lucide-react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts"
 import { SidebarTrigger } from "@/components/ui/sidebar"
@@ -38,8 +39,6 @@ export function Dashboard() {
 
   const handleSetReminders = () => {
     setRemindersOpen(true);
-    // TODO: Implement reminder setting functionality
-    console.log("Opening medication reminders modal");
   };
 
   const handleViewAllAppointments = () => {
@@ -51,20 +50,9 @@ export function Dashboard() {
   return (
     <div className="space-y-6 animate-slide-up">
       <QuickEntryModal open={quickEntryOpen} onOpenChange={setQuickEntryOpen} />
+      <MedicationReminderModal open={remindersOpen} onOpenChange={setRemindersOpen} />
       
-      {/* Temporary modals for reminders and appointments */}
-      {remindersOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setRemindersOpen(false)}>
-          <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4" onClick={e => e.stopPropagation()}>
-            <h3 className="text-lg font-semibold mb-4">Set Medication Reminders</h3>
-            <p className="text-gray-600 mb-4">Reminder functionality will be implemented here.</p>
-            <Button onClick={() => setRemindersOpen(false)} className="w-full">
-              Close
-            </Button>
-          </div>
-        </div>
-      )}
-
+      {/* Appointments modal */}
       {appointmentsOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setAppointmentsOpen(false)}>
           <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4" onClick={e => e.stopPropagation()}>
